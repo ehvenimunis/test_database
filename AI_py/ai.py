@@ -232,7 +232,25 @@ GEREKLİLİKLER:
 7. CMock makrolarını kullan (Mock_xxx_ExpectAndReturn, Mock_xxx_Expect vb.)
 8. Geçerli girdi testleri, geçersiz girdi testleri, sınır değer testleri, bağımlılık hata testleri ekle
 
-KRİTİK: SADECE C test kodu üret. Enum tanımları, typedef'ler, header dosyaları ÜRETME. Sadece test_*.c dosyası içeriği üret."""
+ÖRNEK FORMAT:
+```c
+#include "unity.h"
+#include "cmock.h"
+#include "engine_control.h"
+
+void setUp(void) {{ }}
+void tearDown(void) {{ }}
+
+void test_{function_name}_success(void) {{
+    // Test kodu buraya
+}}
+
+void test_{function_name}_invalid_input(void) {{
+    // Test kodu buraya
+}}
+```
+
+KRİTİK: SADECE C test kodu üret. Enum tanımları, typedef'ler, header dosyaları ÜRETME. Sadece test_*.c dosyası içeriği üret. TAM test dosyasını yaz, eksik bırakma."""
 
 # ==============================================================================
 # OTOMATİK BİLGİ TOPLAMA FONKSİYONLARI
@@ -419,7 +437,7 @@ def build_functional_behavior_doc(function_name, implementation, readme_content)
 # LLM İLE İLETİŞİM FONKSİYONU
 # ==============================================================================
 
-def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=None, use_minimal_history=False):
+def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=None, use_minimal_history=False, function_name=None):
     """LLM'e mesaj gönder ve cevap al"""
     # Son adımda conversation history'yi sıfırla veya minimal tut
     if step_number == 7 or use_minimal_history:
@@ -453,7 +471,7 @@ def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=
     # Adım numarasına göre token limitini ayarla
     if step_number == 7:
         # Son adımda çok daha uzun çıktı bekleniyor (tam test kodu)
-        token_limit = 3000  # Test kodu için daha fazla token
+        token_limit = max_tokens if max_tokens > 3000 else 3000  # Test kodu için daha fazla token
     elif step_number in [1, 2, 3]:
         # İlk adımlarda kısa onay bekleniyor
         token_limit = 200  # Daha kısa limit - sadece onay
@@ -471,15 +489,17 @@ def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=
         token_limit = 1500
     
     with torch.no_grad():
+        # Son adımda daha yüksek temperature - daha yaratıcı test kodları için
+        temp = 0.3 if step_number == 7 else 0.2
         outputs = model.generate(
             **inputs,
             max_new_tokens=token_limit,
-            temperature=0.2,
+            temperature=temp,
             top_p=0.9,
             do_sample=True,
             eos_token_id=tokenizer.eos_token_id,
             pad_token_id=tokenizer.eos_token_id,
-            repetition_penalty=1.1  # Tekrarları azalt
+            repetition_penalty=1.15 if step_number == 7 else 1.1  # Son adımda daha yüksek repetition penalty
         )
     
     generated_text = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
@@ -494,9 +514,36 @@ def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=
         return generated_text[:500] + "\n\n[... çıktı kesildi, muhtemelen tekrarlı enum tanımları ...]"
     
     # Yanlış format kontrolü - eğer kod/enum üretiyorsa uyar
-    if step_number in [1, 2, 3] and ("typedef" in generated_text or "enum" in generated_text or "void " in generated_text[:100]):
+    if step_number in [1, 2, 3] and ("typedef" in generated_text or "enum" in generated_text or "void " in generated_text[:100] or "EngineResult_t" in generated_text[:200]):
         print("\n[UYARI: LLM beklenen formatta cevap vermedi - kod/enum üretiyor]")
         print("[İlk 200 karakter:]", generated_text[:200])
+        print("[LLM'e tekrar gönderiliyor...]")
+        # Tekrar dene - daha kısa ve net prompt ile
+        retry_prompt = f"""SADECE onay ver. Kod yazma. Sadece şunu yaz: "Evet, hazırım." veya "Anladım, devam edebiliriz." gibi kısa bir onay."""
+        if step_number == 1:
+            retry_prompt = "SADECE şunu yaz: Evet, hazırım. Lütfen ilk adıma geçelim."
+        elif step_number == 2 and function_name:
+            retry_prompt = f"SADECE şunu yaz: Genel bağlamı ve {function_name} fonksiyonunun teknik arayüzünü başarıyla analiz ettim. Bir sonraki adıma geçmeye hazırım."
+        elif step_number == 3 and function_name:
+            retry_prompt = f"SADECE şunu yaz: {function_name} fonksiyonunun detaylı fonksiyonel davranışını ve içsel mantığını tam olarak anladım. Bir sonraki adıma geçmeye hazırım."
+        
+        # Tekrar dene
+        retry_inputs = tokenizer(f"### Instruction:\n{retry_prompt}\n\n### Response:\n", return_tensors="pt", truncation=True, max_length=512).to("cuda")
+        with torch.no_grad():
+            retry_outputs = model.generate(
+                **retry_inputs,
+                max_new_tokens=100,
+                temperature=0.1,  # Daha düşük temperature - daha deterministik
+                top_p=0.9,
+                do_sample=True,
+                eos_token_id=tokenizer.eos_token_id,
+                pad_token_id=tokenizer.eos_token_id,
+                repetition_penalty=1.2
+            )
+        retry_text = tokenizer.decode(retry_outputs[0][retry_inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+        if len(retry_text) < 500 and "typedef" not in retry_text and "enum" not in retry_text:
+            print("[✓] Tekrar deneme başarılı, doğru format alındı")
+            return retry_text.strip()
     
     return generated_text.strip()
 
@@ -573,7 +620,7 @@ def run_7_step_process():
     print("\nLLM'e gönderilen mesaj:")
     print(step1_prompt[:200] + "...")
     
-    response1 = send_to_llm(step1_prompt, step_number=1)
+    response1 = send_to_llm(step1_prompt, step_number=1, function_name=function_name)
     conversation_history.append(f"Kullanıcı: {step1_prompt}")
     conversation_history.append(f"Asistan: {response1}")
     
@@ -593,7 +640,7 @@ def run_7_step_process():
     # function_interface_doc zaten oluşturuldu
     
     step2_prompt = get_step2_prompt(header_files_content, function_name, function_interface_doc)
-    response2 = send_to_llm(step2_prompt, conversation_history, step_number=2)
+    response2 = send_to_llm(step2_prompt, conversation_history, step_number=2, function_name=function_name)
     conversation_history.append(f"Kullanıcı: {step2_prompt}")
     conversation_history.append(f"Asistan: {response2}")
     
@@ -611,7 +658,7 @@ def run_7_step_process():
     # functional_behavior_doc zaten oluşturuldu
     
     step3_prompt = get_step3_prompt(function_name, functional_behavior_doc)
-    response3 = send_to_llm(step3_prompt, conversation_history, step_number=3)
+    response3 = send_to_llm(step3_prompt, conversation_history, step_number=3, function_name=function_name)
     conversation_history.append(f"Kullanıcı: {step3_prompt}")
     conversation_history.append(f"Asistan: {response3}")
     
@@ -625,7 +672,7 @@ def run_7_step_process():
     print("\n[ADIM 4/7] Test Tasarım Kriterleri ve Mock Davranış Kurallarını Türetme")
     print("-" * 50)
     step4_prompt = get_step4_prompt(function_name)
-    response4 = send_to_llm(step4_prompt, conversation_history, step_number=4)
+    response4 = send_to_llm(step4_prompt, conversation_history, step_number=4, function_name=function_name)
     conversation_history.append(f"Kullanıcı: {step4_prompt}")
     conversation_history.append(f"Asistan: {response4}")
     
@@ -639,7 +686,7 @@ def run_7_step_process():
     print("\n[ADIM 5/7] Statik Kontrol ve Teyit")
     print("-" * 50)
     step5_prompt = get_step5_prompt()
-    response5 = send_to_llm(step5_prompt, conversation_history, step_number=5)
+    response5 = send_to_llm(step5_prompt, conversation_history, step_number=5, function_name=function_name)
     conversation_history.append(f"Kullanıcı: {step5_prompt}")
     conversation_history.append(f"Asistan: {response5}")
     
@@ -653,7 +700,7 @@ def run_7_step_process():
     print("\n[ADIM 6/7] Bilgi Sıkıştırma (Final Briefing)")
     print("-" * 50)
     step6_prompt = get_step6_prompt(function_name)
-    response6 = send_to_llm(step6_prompt, conversation_history, step_number=6)
+    response6 = send_to_llm(step6_prompt, conversation_history, step_number=6, function_name=function_name)
     conversation_history.append(f"Kullanıcı: {step6_prompt}")
     conversation_history.append(f"Asistan: {response6}")
     
@@ -696,6 +743,22 @@ Fonksiyon İş Akışı (Özet):
     # Son adımda conversation history'yi sıfırla ve sadece özet bilgiler + prompt gönder
     step7_prompt = get_step7_prompt(function_name)
     
+    # Header dosyalarından sadece ilgili kısımları çıkar (çok uzun olmasın)
+    header_summary = ""
+    if header_content:
+        # Sadece fonksiyon imzası ve yakın çevresini al
+        func_pos = header_content.find(function_name)
+        if func_pos > 0:
+            start = max(0, func_pos - 500)
+            end = min(len(header_content), func_pos + 1000)
+            header_summary = header_content[start:end]
+    
+    # Implementasyon özeti
+    impl_summary = ""
+    if implementation:
+        # Implementasyondan sadece önemli kısımları al
+        impl_summary = implementation[:1500]  # İlk 1500 karakter
+    
     # Kapsamlı prompt oluştur
     enhanced_step7_prompt = f"""Sen bir C test kodu uzmanısın. Aşağıda {function_name} fonksiyonu için tüm gerekli bilgiler bulunmaktadır:
 
@@ -703,13 +766,21 @@ Fonksiyon İş Akışı (Özet):
 
 {test_design_summary if test_design_summary else ''}
 
+Fonksiyon Implementasyonu:
+```c
+{impl_summary if impl_summary else 'Implementasyon bulunamadı'}
+```
+
+İlgili Header Bilgileri:
+{header_summary[:600] if header_summary else 'Header bilgisi bulunamadı'}...
+
 Şimdi bu bilgilere dayanarak {function_name} fonksiyonu için Ceedling/Unity formatında TAM ve EKSİKSİZ bir test dosyası yaz.
 
 {step7_prompt}"""
     
     print("[Final briefing hazırlandı, test kodu üretiliyor...]")
     print(f"[Final briefing uzunluğu: {len(enhanced_step7_prompt)} karakter]")
-    response7 = send_to_llm(enhanced_step7_prompt, conversation_history=None, step_number=7, max_tokens=3000, use_minimal_history=True)
+    response7 = send_to_llm(enhanced_step7_prompt, conversation_history=None, step_number=7, max_tokens=4000, use_minimal_history=True, function_name=function_name)
     
     print("\n" + "="*50)
     print(" ÜRETİLEN TEST KODU")

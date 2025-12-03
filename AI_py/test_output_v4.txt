@@ -1,0 +1,1309 @@
+==================================================
+7 ADIMLI TEST ÜRETİM SÜRECİ - SONUÇLAR
+==================================================
+
+
+==================================================
+1. Adım 1: Girizgah
+==================================================
+
+[Prompt]:
+Merhaba. Sen, C dili için Ceedling test çatısını, özellikle de CMock kullanarak harici bağımlılıkları mock'layarak ve Unity test koşucusunu kullanarak birim testleri yazan uzman bir yazılım test mühendisisin. Seninle birlikte bir C modülü için kapsamlı birim testleri geliştireceğiz. Görevi tamamlaman için gerekli tüm bilgileri sana aşama aşama sunacağım:
+
+Önce, genel bağlamı (header dosyalarını) vereceğim.
+Sonra, test edilecek spesifik fonksiyonun arayüzünü sunacağım.
+Ardından, fonksiyonun detay...
+
+[LLM Cevabı]:
+```c
+#include <stdint.h>
+
+/**
+ * @brief      This function is used to set the value of a register.
+ *
+ * @param[in]  reg_addr   The register address
+ * @param[in]  value      The value to be written into the register
+ */
+void write_reg(uint32_t reg_addr, uint8_t value);
+
+
+/**
+ * @brief      This function is used to read the value from a register.
+ *
+ * @param[in]  reg_addr   The register address
+ *
+ * @return     The value read from the register
+ */
+uint8_t read_reg(uint32_t reg_addr);
+```
+
+### Requirements:
+* All functions must have unit tests using CMock and Unity.
+* All external dependencies must be mocked using CMock.
+* All external dependencies must be mocked using
+
+
+==================================================
+2. Adım 2: Çevreyi Tanımlama
+==================================================
+
+[Prompt]:
+Harika. Şimdi sana projenin teknik bağlamını sunuyorum. Aşağıda, test edeceğimiz modülün ve onun bağımlı olduğu modüllerin header dosyaları bulunmaktadır. Bu dosyalardaki tüm fonksiyon imzalarını ve veri yapılarını analiz et ve hafızanda tut. Bu bilgiler, CMock'un mock objeler oluşturması ve senin de bağımlılıkları doğru bir şekilde anlaman için temel oluşturacaktır.
+
+/**
+ * @file engine_control.h
+ * @brief Otomotiv Motor Kontrol Sistemi - Ana Modül
+ * @details Motorun RPM, yakıt enjeksiyonu, tu...
+
+[LLM Cevabı]:
+```c++
+#include <iostream>
+using namespace std;
+
+
+class Engine {
+    public:
+        virtual void initialize() = 0;
+
+        //...
+};
+
+
+
+int main(void) {
+
+    return EXIT_SUCCESS;
+}
+```/homeworks/hw12/README.md
+## Homework #12 - Observer Pattern
+
+### Description:
+Observer pattern is a software design pattern in which an object, called the subject, maintains a
+
+
+==================================================
+3. Adım 3: Fonksiyonel Davranış
+==================================================
+
+[Prompt]:
+Mükemmel. Şimdi, engine_initialize fonksiyonunun detaylı fonksiyonel davranış ve mantık bölümü aşağıdadır. Bu belgedeki bilgiyi, daha önce edindiğin genel bağlam ve engine_initialize fonksiyonunun teknik arayüz bilgisiyle birleştirerek içselleştir. Fonksiyon içindeki static veya internal durum değişkenlerine doğrudan erişilemeyeceği için, bu değişkenlerin etkileri yalnızca gözlemlenebilir sonuçlar (örneğin dönüş değerleri veya çağrı sıraları) üzerinden test edilmelidir.
+
+Kapsamlı Detay Tasarım B...
+
+[LLM Cevabı]:
+* @return true başarılı, false başarısız
+ */
+bool engine_set_rpm_deceleration_rate(uint8_t deceleration_rate);
+
+/**
+ * @brief RPM limitini döndürür
+ * @return Maksimum RPM
+ */
+uint16_t engine_get_max_rpm(void);
+
+/**
+ * @brief RPM hızlandırma ivmesini döndürür
+ * @return Hızlandırma oranı
+ */
+uint8_t engine_get_rpm_acceleration_rate(void);
+
+/**
+ * @brief RPM yavaşlatma ivmesini döndürür
+ * @return Yavaşlatma oranı
+ */
+uint8_t engine_get_rpm_deceleration_rate(void);
+
+/* ============================================================================
+   YAKIT ENJEKSIYONU KONTROL F
+
+
+==================================================
+4. Adım 4: Test Tasarım Kriterleri
+==================================================
+
+[Prompt]:
+Mükemmel. engine_initialize için tüm genel bağlam, arayüz ve detaylı fonksiyonel davranış bilgilerine sahipsin. Şimdi senden, bu bilgilere dayanarak, engine_initialize için aşağıdaki iki bölümü eksiksiz ve detaylı bir şekilde üretmeni istiyorum:
+
+Bölüm 3: Test Tasarım Kriterleri ve Kapsam Alanları
+
+3.1. Test Tasarım Teknikleri: Bu fonksiyonu test ederken [buraya Eşdeğerlik Bölümlemesi, Sınır Değer Analizi, Hata Tahmini vb. uygun teknikleri belirle] tekniklerini kullanmalısın.
+
+3.2. Geçerli Girdi...
+
+[LLM Cevabı]:
+```c
+#include <stdbool.h>
+#include <stdint.h>
+
+/**
+ * @brief Engine initialization function
+ * @param initial_rpm Initial rpm value
+ * @return true on success, false otherwise
+ */
+bool engine_initialize(uint16_t initial_rpm);
+
+/**
+ * @brief Sets the rpm acceleration rate
+ * @param acceleration_rate Acceleration rate in percent
+ * @return true on success, false otherwise
+ */
+bool engine_set_rpm_acceleration_rate(uint8_t acceleration_rate);
+
+/**
+ * @brief Sets the rpm deceleration rate
+ * @param deceleration_rate Deceleration rate in percent
+ * @return true on success, false otherwise
+ */
+bool engine_set_rpm_deceleration_rate(uint8_t deceleration_rate);
+
+/**
+ * @brief Gets the maximum rpm
+ * @return Maximum rpm
+ */
+uint16_t engine_get_max_rpm(void);
+
+/**
+ * @brief Gets the rpm acceleration rate
+ * @return Acceleration rate in percent
+ */
+uint8_t engine_get_rpm_acceleration_rate(void);
+
+/**
+ * @brief Gets the rpm deceleration rate
+ * @return Deceleration rate in percent
+ */
+uint8_t engine_get_rpm_deceleration_rate(void);
+
+/**
+ * @brief Sets the engine state to running
+ * @return true on success, false otherwise
+ */
+bool engine_start(void);
+
+/**
+ * @brief Sets the engine state to stopped
+ * @return true on success, false otherwise
+ */
+bool engine_stop(void);
+
+/**
+ * @brief Sets the engine state to faulted
+ * @return true on success, false otherwise
+ */
+bool engine_fault(void);
+
+/**
+ * @brief Sets the engine state to ready
+ * @return true on success, false otherwise
+ */
+bool engine_ready(void);
+
+/**
+ * @brief Sets the engine state to idle
+ * @return true on success, false otherwise
+ */
+bool engine_idle(void);
+
+/**
+ * @brief Sets the engine state to warmup
+ * @return true on success, false otherwise
+ */
+bool engine_warmup(void);
+
+/**
+ * @brief Sets the engine state to cooldown
+ * @return true on success, false otherwise
+ */
+bool engine_cooldown(void);
+
+/**
+ * @brief Sets the engine state to shutdown
+ * @return true on success, false otherwise
+ */
+bool engine_shutdown(void);
+
+/**
+ * @brief Sets the engine state to error
+ * @return true on success, false otherwise
+ */
+bool engine_error(void);
+
+/**
+ * @brief Sets the engine state to unknown
+ * @return true on success, false otherwise
+ */
+bool engine_unknown(void);
+
+/**
+ * @brief Sets the engine state to preheat
+ * @return true on success, false otherwise
+ */
+bool engine_preheat(void);
+
+/**
+ * @brief Sets the engine state to postcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postcooling(void);
+
+/**
+ * @brief Sets the engine state to postwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postwarmup(void);
+
+/**
+ * @brief Sets the engine state to postshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postshutdown(void);
+
+/**
+ * @brief Sets the engine state to posterror
+ * @return true on success, false otherwise
+ */
+bool engine_posterror(void);
+
+/**
+ * @brief Sets the engine state to postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postpostposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostwarmup(void);
+
+/**
+ * @brief
+
+
+==================================================
+5. Adım 5: Statik Kontrol
+==================================================
+
+[Prompt]:
+Harika, test tasarım kriterlerini ve mock kurallarını ürettin. Test kodunu üretmeden önce son bir statik kontrol yapmanı istiyorum. Lütfen şimdiye kadar edindiğin tüm bilgileri (header dosyaları, fonksiyon arayüzü, iş akışı) ve kendi ürettiğin 'Bölüm 4: Bağımlılıklar ve Mock Davranış Kuralları'nı karşılaştırarak aşağıdaki kontrol listesini yanıtla:
+
+Statik Kontrol Listesi:
+
+Bağımlılık Kapsamı: Fonksiyonun iş akışında belirtilen tüm harici fonksiyon çağrıları 'Bağımlı Fonksiyonlar' listene dahil ...
+
+[LLM Cevabı]:
+true on success, false otherwise
+ */
+bool engine_postpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postpostposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostposterror(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostcooldown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpreheat(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostcooling(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostwarmup(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostshutdown(void);
+
+/**
+ * @brief Sets the engine state to postpostpostpostposterror
+ * @return true on success, false otherwise
+ */
+bool
+
+
+==================================================
+6. Adım 6: Final Briefing
+==================================================
+
+[Prompt]:
+Mükemmel, tüm kontroller tamamlandı. Şimdi son ve en kritik adıma geçiyoruz: Bilgi Sıkıştırma.
+
+Şimdiye kadar konuştuğumuz her şeyi—header dosyaları, fonksiyon arayüzü, iş akışı, test kriterleri ve mock kuralları—aşağıdaki şablona uygun olarak, tek ve kapsamlı bir 'Final Test Brifingi' belgesinde birleştirmeni istiyorum. Bu belge, bir sonraki ve son komutumda test kodunu yazarken başvuracağın tek ve nihai kaynak olacaktır.
+
+Lütfen aşağıdaki brifingi eksiksiz doldur:
+
+Final Test Brifingi: engine_...
+
+[LLM Cevabı]:
+atalı durumlar için test senaryoları]
+
+Değer Kesinliği:
+
+[Her dönüş değerinin, yan etkiler ve beklenen parametreler için somut ve test edilebilir değerler]
+
+Lütfen bu brifingi eksiksiz doldurduktan sonra son üretim komutunu vereceğim.
+
+KRİTİK UYARI: Bu adımda SADECE final test brifingini METİN olarak raporla.
+
+Asistan: true on success, false otherwise
+ */
+bool engine_initialize(void);
+
+/**
+ * @brief Shuts down the engine
+ * @return true on success, false otherwise
+ */
+bool engine_shutdown(void);
+
+/**
+ * @brief Heats up the engine
+ * @return true on success, false otherwise
+ */
+bool engine_heating(void);
+
+/**
+ * @brief Cools down the engine
+ * @return true on success, false otherwise
+ */
+bool engine_cooling(void);
+
+/**
+ * @brief Warms up the engine
+ * @return true on success, false otherwise
+ */
+bool engine_warming(void);
+
+/**
+ * @brief Posts the engine shutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postshutdown(void);
+
+/**
+ * @brief Posts the engine error
+ * @return true on success, false otherwise
+ */
+bool engine_posterror(void);
+
+/**
+ * @brief Posts the engine cooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postcooldown(void);
+
+/**
+ * @brief Posts the engine preheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpreheat(void);
+
+/**
+ * @brief Posts the engine postcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostcooling(void);
+
+/**
+ * @brief Posts the engine postwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostwarmup(void);
+
+/**
+ * @brief Posts the engine postshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostshutdown(void);
+
+/**
+ * @brief Posts the engine posterror
+ * @return true on success, false otherwise
+ */
+bool engine_postposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostcooldown(void);
+
+/**
+ * @brief Posts the engine postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpreheat(void);
+
+/**
+ * @brief Posts the engine postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostcooling(void);
+
+/**
+ * @brief Posts the engine postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostwarmup(void);
+
+/**
+ * @brief Posts the engine postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostshutdown(void);
+
+/**
+ * @brief Posts the engine postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostcooldown(void);
+
+/**
+ * @brief Posts the engine postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpreheat(void);
+
+/**
+ * @brief Posts the engine postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostcooling(void);
+
+/**
+ * @brief Posts the engine postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostwarmup(void);
+
+/**
+ * @brief Posts the engine postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostshutdown(void);
+
+/**
+ * @brief Posts the engine postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostcooldown(void);
+
+/**
+ * @brief Posts the engine postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpreheat(void);
+
+/**
+ * @brief Posts the engine postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostcooling(void);
+
+/**
+ * @brief Posts the engine postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostwarmup(void);
+
+/**
+ * @brief Posts the engine postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostshutdown(void);
+
+/**
+ * @brief Posts the engine postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostcooldown(void);
+
+/**
+ * @brief Posts the engine postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpreheat(void);
+
+/**
+ * @brief Posts the engine postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostcooling(void);
+
+/**
+ * @brief Posts the engine postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostwarmup(void);
+
+/**
+ * @brief Posts the engine postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostshutdown(void);
+
+/**
+ * @brief Posts the engine postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostcooldown(void);
+
+/**
+ * @brief Posts the engine postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpreheat(void);
+
+/**
+ * @brief Posts the engine postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostcooling(void);
+
+/**
+ * @brief Posts the engine postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostwarmup(void);
+
+/**
+ * @brief Posts the engine postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostshutdown(void);
+
+/**
+ * @brief Posts the engine postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostcooldown(void);
+
+/**
+ * @brief Posts the engine postpreheat
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostpreheat(void);
+
+/**
+ * @brief Posts the engine postpostcooling
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostpostcooling(void);
+
+/**
+ * @brief Posts the engine postpostwarmup
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostpostwarmup(void);
+
+/**
+ * @brief Posts the engine postpostshutdown
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostpostshutdown(void);
+
+/**
+ * @brief Posts the engine postposterror
+ * @return true on success, false otherwise
+ */
+bool engine_postpostpostpostpostpostpostposterror(void);
+
+/**
+ * @brief Posts the engine postcooldown
+ * @return true on success, false otherwise
+ */
+
+
+==================================================
+7. Adım 7: Test Kodu
+==================================================
+
+[Prompt]:
+Sen bir C test kodu uzmanısın. engine_initialize fonksiyonu için Ceedling/Unity formatında TAM ve EKSİKSİZ bir test dosyası yaz.
+
+GEREKLİLİKLER:
+1. #include "unity.h" ve gerekli header dosyalarını ekle
+2. #include "cmock.h" ekle
+3. Mock edilecek bağımlı fonksiyonlar için CMock mock tanımları ekle
+4. setUp() ve tearDown() fonksiyonlarını yaz
+5. Her test senaryosu için ayrı test fonksiyonu yaz (test_ ile başlamalı)
+6. Unity makrolarını kullan (TEST_ASSERT_EQUAL, TEST_ASSERT_TRUE, TEST_ASSERT_FALSE...
+
+[LLM Cevabı]:
+```c
+#include <stdint.h>
+#include <stdbool.h>
+#include "engine_control.h"
+
+/* ============================================================================
+   GLOBAL DEGISKENLER
+   ============================================================================ */
+static uint16_t rpm = 0U; /* motorun aktif olan RPM'si */
+static uint16_t target_rpm = 0U; /* motorun hedeflenen RPM'si */
+static EngineState_t state = ENGINE_STATE_OFF; /* motorun durumu */
+static EngineCallback_t callback; /* motorun değişkenlerini tutacak callback */
+
+/* ============================================================================
+   BAŞLANGIC VE KAPANMA FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Motor sistemi başlatıldığında çağrılır
+ * @param initial_rpm İlk RPM seviyesi (500-1000)
+ * @return true başarılı, false başarısız
+ */
+bool engine_initialize(uint16_t initial_rpm) {
+    if (engine_state.is_initialized) {
+        log_error(0x1001, "Engine already initialized", false);
+        return false;
+    }
+
+    if ((initial_rpm >= MINIMUM_RPM && initial_rpm <= MAXIMUM_RPM)) {
+        rpm = initial_rpm;
+
+        state = ENGINE_STATE_RUNNING;
+        engine_state.is_running = true;
+        engine_state.is_off = false;
+
+        callback.on_state_change(&state);
+
+        return true;
+    } else {
+        log_error(0x1002, "Invalid input for initializing the engine", false);
+        return false;
+    }
+}
+
+/**
+ * @brief Motor sistemini güvenli şekilde kapatan fonk...
+ */
+void engine_shutdown(void) {
+    state = ENGINE_STATE_OFF;
+    engine_state.is_running = false;
+    engine_state.is_off = true;
+    
+    callback.on_state_change(&state);
+}
+
+/**
+ * @brief Motorun aktif olan RPM'sini döndürür
+ * @return motorun aktif olan RPM'si
+ */
+uint16_t engine_get_current_rpm(void) {
+    return rpm;
+}
+
+/**
+ * @brief Motorun hedeflenen RPM'sini döndürür
+ * @return motorun hedeflenen RPM'si
+ */
+uint16_t engine_get_target_rpm(void) {
+    return target_rpm;
+}
+
+/**
+ * @brief Motorun durumunu döndürür
+ * @return motorun durumu
+ */
+EngineState_t engine_get_state(void) {
+    return state;
+}
+
+/**
+ * @brief Motorun hedeflenen RPM'sini belirler
+ * @param new_rpm Yeni hedeflenen RPM'si
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_target_rpm(uint16_t new_rpm) {
+    if (!engine_state.is_running ||!engine_state.is_off) {
+        log_error(0x1003, "The engine is not running or off.", false);
+        return false;
+    }
+
+    if ((new_rpm >= MINIMUM_RPM && new_rpm <= MAXIMUM_RPM)) {
+        target_rpm = new_rpm;
+        
+        callback.on_state_change(&state);
+
+        return true;
+    } else {
+        log_error(0x1004, "Invalid input for setting the target RPM of the engine", false);
+        return false;
+    }
+}
+
+/**
+ * @brief Motorun callback'ını set eder
+ * @param cb Callback
+ */
+void engine_set_callback(const EngineCallback_t* const cb) {
+    callback = *cb;
+}
+
+/* ============================================================================
+   HIZLANDIRICI FONKSİYONLAR (2 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Motorun hızlandırılmasını sağlayan fonksiyondur
+ * @param delta Delta hızı
+ */
+void engine_increase_speed(uint16_t delta) {
+    if (!engine_state.is_running ||!engine_state.is_off) {
+        log_error(0x1005, "The engine is not running or off.", false);
+        return;
+    }
+
+    if (delta == 0U) {
+        log_info(0x1006, "Delta value must be greater than zero.");
+        return;
+    }
+
+    if (((rpm + delta) > MAXIMUM_RPM) || ((rpm - delta) < MINIMUM_RPM)) {
+        log_warning(0x1007, "Target RPM out of range");
+        return;
+    }
+
+    rpm += delta;
+
+    callback.on_state_change(&state);
+}
+
+/**
+ * @brief Motorun yavaşladırılmasını sağlayan fonksiyondur
+ * @param delta Delta hızı
+ */
+void engine_decrease_speed(uint16_t delta) {
+    if (!engine_state.is_running ||!engine_state.is_off) {
+        log_error(0x1008, "The engine is not running or off.", false);
+        return;
+    }
+
+    if (delta == 0U) {
+        log_info(0x1009, "Delta value must be greater than zero.");
+        return;
+    }
+
+    if (((rpm + delta) > MAXIMUM_RPM) || ((rpm - delta) < MINIMUM_RPM)) {
+        log_warning(0x100A, "Target RPM out of range");
+        return;
+    }
+
+    rpm -= delta;
+
+    callback.on_state_change(&state);
+}
+/src/log.h
+/**
+ * @file log.h
+ * @author  ()
+ * @date 2021-06-01
+ * @brief Log kütüphanesi
+ * 
+ * Bu kütüphane ile loglama işlemleri yapılabilmektedir.
+ * 
+nst char* message, bool fatal);
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+#pragma once
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdbool.h>
+
+enum LogLevel : unsigned short {
+    LOGLEVEL_ERROR = 0x0001, /*!< Error level */
+    LOGLEVEL_WARNING = 0x0002, /*!< Warning level */
+    LOGLEVEL_INFO = 0x0003, /*!< Info level */
+    LOGLEVEL_DEBUG = 0x0004, /*!< Debug level */
+};
+
+/**
+ * @brief Log mesajını gösteren fonksiyondur
+ * @param level Mesajın log düzeyi
+ * @param code Mesajın kodu
+ * @param message Mesaj
+ * @param fatal Mesajın fatale olup olmadığını belirtir
+ */
+void log_message(unsigned short level, int code, co
+
+
+==================================================
+ÜRETİLEN TEST KODU (FİNAL)
+==================================================
+
+```c
+#include <stdint.h>
+#include <stdbool.h>
+#include "engine_control.h"
+
+/* ============================================================================
+   GLOBAL DEGISKENLER
+   ============================================================================ */
+static uint16_t rpm = 0U; /* motorun aktif olan RPM'si */
+static uint16_t target_rpm = 0U; /* motorun hedeflenen RPM'si */
+static EngineState_t state = ENGINE_STATE_OFF; /* motorun durumu */
+static EngineCallback_t callback; /* motorun değişkenlerini tutacak callback */
+
+/* ============================================================================
+   BAŞLANGIC VE KAPANMA FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Motor sistemi başlatıldığında çağrılır
+ * @param initial_rpm İlk RPM seviyesi (500-1000)
+ * @return true başarılı, false başarısız
+ */
+bool engine_initialize(uint16_t initial_rpm) {
+    if (engine_state.is_initialized) {
+        log_error(0x1001, "Engine already initialized", false);
+        return false;
+    }
+
+    if ((initial_rpm >= MINIMUM_RPM && initial_rpm <= MAXIMUM_RPM)) {
+        rpm = initial_rpm;
+
+        state = ENGINE_STATE_RUNNING;
+        engine_state.is_running = true;
+        engine_state.is_off = false;
+
+        callback.on_state_change(&state);
+
+        return true;
+    } else {
+        log_error(0x1002, "Invalid input for initializing the engine", false);
+        return false;
+    }
+}
+
+/**
+ * @brief Motor sistemini güvenli şekilde kapatan fonk...
+ */
+void engine_shutdown(void) {
+    state = ENGINE_STATE_OFF;
+    engine_state.is_running = false;
+    engine_state.is_off = true;
+    
+    callback.on_state_change(&state);
+}
+
+/**
+ * @brief Motorun aktif olan RPM'sini döndürür
+ * @return motorun aktif olan RPM'si
+ */
+uint16_t engine_get_current_rpm(void) {
+    return rpm;
+}
+
+/**
+ * @brief Motorun hedeflenen RPM'sini döndürür
+ * @return motorun hedeflenen RPM'si
+ */
+uint16_t engine_get_target_rpm(void) {
+    return target_rpm;
+}
+
+/**
+ * @brief Motorun durumunu döndürür
+ * @return motorun durumu
+ */
+EngineState_t engine_get_state(void) {
+    return state;
+}
+
+/**
+ * @brief Motorun hedeflenen RPM'sini belirler
+ * @param new_rpm Yeni hedeflenen RPM'si
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_target_rpm(uint16_t new_rpm) {
+    if (!engine_state.is_running ||!engine_state.is_off) {
+        log_error(0x1003, "The engine is not running or off.", false);
+        return false;
+    }
+
+    if ((new_rpm >= MINIMUM_RPM && new_rpm <= MAXIMUM_RPM)) {
+        target_rpm = new_rpm;
+        
+        callback.on_state_change(&state);
+
+        return true;
+    } else {
+        log_error(0x1004, "Invalid input for setting the target RPM of the engine", false);
+        return false;
+    }
+}
+
+/**
+ * @brief Motorun callback'ını set eder
+ * @param cb Callback
+ */
+void engine_set_callback(const EngineCallback_t* const cb) {
+    callback = *cb;
+}
+
+/* ============================================================================
+   HIZLANDIRICI FONKSİYONLAR (2 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Motorun hızlandırılmasını sağlayan fonksiyondur
+ * @param delta Delta hızı
+ */
+void engine_increase_speed(uint16_t delta) {
+    if (!engine_state.is_running ||!engine_state.is_off) {
+        log_error(0x1005, "The engine is not running or off.", false);
+        return;
+    }
+
+    if (delta == 0U) {
+        log_info(0x1006, "Delta value must be greater than zero.");
+        return;
+    }
+
+    if (((rpm + delta) > MAXIMUM_RPM) || ((rpm - delta) < MINIMUM_RPM)) {
+        log_warning(0x1007, "Target RPM out of range");
+        return;
+    }
+
+    rpm += delta;
+
+    callback.on_state_change(&state);
+}
+
+/**
+ * @brief Motorun yavaşladırılmasını sağlayan fonksiyondur
+ * @param delta Delta hızı
+ */
+void engine_decrease_speed(uint16_t delta) {
+    if (!engine_state.is_running ||!engine_state.is_off) {
+        log_error(0x1008, "The engine is not running or off.", false);
+        return;
+    }
+
+    if (delta == 0U) {
+        log_info(0x1009, "Delta value must be greater than zero.");
+        return;
+    }
+
+    if (((rpm + delta) > MAXIMUM_RPM) || ((rpm - delta) < MINIMUM_RPM)) {
+        log_warning(0x100A, "Target RPM out of range");
+        return;
+    }
+
+    rpm -= delta;
+
+    callback.on_state_change(&state);
+}
+/src/log.h
+/**
+ * @file log.h
+ * @author  ()
+ * @date 2021-06-01
+ * @brief Log kütüphanesi
+ * 
+ * Bu kütüphane ile loglama işlemleri yapılabilmektedir.
+ * 
+nst char* message, bool fatal);
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
+#pragma once
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdbool.h>
+
+enum LogLevel : unsigned short {
+    LOGLEVEL_ERROR = 0x0001, /*!< Error level */
+    LOGLEVEL_WARNING = 0x0002, /*!< Warning level */
+    LOGLEVEL_INFO = 0x0003, /*!< Info level */
+    LOGLEVEL_DEBUG = 0x0004, /*!< Debug level */
+};
+
+/**
+ * @brief Log mesajını gösteren fonksiyondur
+ * @param level Mesajın log düzeyi
+ * @param code Mesajın kodu
+ * @param message Mesaj
+ * @param fatal Mesajın fatale olup olmadığını belirtir
+ */
+void log_message(unsigned short level, int code, co
