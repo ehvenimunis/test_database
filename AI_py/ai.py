@@ -66,24 +66,19 @@ def get_step1_prompt():
     return """Merhaba. Sen, C dili için Ceedling test çatısını, özellikle de CMock kullanarak harici bağımlılıkları mock'layarak ve Unity test koşucusunu kullanarak birim testleri yazan uzman bir yazılım test mühendisisin. Seninle birlikte bir C modülü için kapsamlı birim testleri geliştireceğiz. Görevi tamamlaman için gerekli tüm bilgileri sana aşama aşama sunacağım:
 
 Önce, genel bağlamı (header dosyalarını) vereceğim.
-
 Sonra, test edilecek spesifik fonksiyonun arayüzünü sunacağım.
-
 Ardından, fonksiyonun detaylı işlevsel davranışını ve mantığını aktaracağım.
-
 Daha sonra, senden tüm bu bilgilere dayanarak test tasarım kriterlerini ve mock davranış kurallarını türetmeni isteyeceğim.
-
 Test kodunu üretmeden önce, senden bu analizine dair bir statik kontrol yapmanı ve her şeyin eksiksiz olduğunu teyit etmeni isteyeceğim.
-
 Tüm kontrollerden sonra, senden şimdiye kadarki tüm kritik bilgileri tek bir 'Final Test Brifingi' belgesinde özetleyip sıkıştırmanı isteyeceğim.
-
 Son olarak, bu nihai brifinge dayanarak Ceedling/Unity formatında tam bir test kodu üretmeni isteyeceğim.
 
-Her adımdan sonra bilgiyi işlediğini ve bir sonraki adıma hazır olduğunu teyit et. Bu göreve hazır mısın?"""
+KRİTİK UYARI: Bu adımda SADECE ve SADECE şu cümleyi yaz: "Evet, hazırım. Lütfen ilk adıma geçelim."
+Başka HİÇBİR şey yazma. Kod yazma, enum tanımlama, fonksiyon yazma, açıklama yapma. Sadece bu cümleyi yaz."""
 
 def get_step2_prompt(header_files_content, function_name, function_interface_doc):
     """Adım 2: Çevreyi Tanımlama (Genel Bağlam - Header Dosyaları ve Fonksiyonun Genel Tanımı)"""
-    return f"""Harika. Şimdi sana projenin teknik bağlamını sunuyorum. Aşağıda, test edeceğimiz modülün ve onun bağımlı olduğu modüllerin header dosyaları bulunmaktadır. Bu dosyalardaki tüm fonksiyon imzalarını ve veri yapılarını analiz et ve hafızanda tut. Bu bilgiler, CMock'un mock objeler oluşturması ve senin de bağımlılıkları doğru bir şekilde anlaman için temel oluşturacaktır. Henüz test yazma, sadece bu yapıyı öğren ve içselleştir.
+    return f"""Harika. Şimdi sana projenin teknik bağlamını sunuyorum. Aşağıda, test edeceğimiz modülün ve onun bağımlı olduğu modüllerin header dosyaları bulunmaktadır. Bu dosyalardaki tüm fonksiyon imzalarını ve veri yapılarını analiz et ve hafızanda tut. Bu bilgiler, CMock'un mock objeler oluşturması ve senin de bağımlılıkları doğru bir şekilde anlaman için temel oluşturacaktır.
 
 {header_files_content}
 
@@ -93,7 +88,8 @@ Kapsamlı Detay Tasarım Belgesi: {function_name} (Bölüm 1 ve Bölüm 2)
 
 {function_interface_doc}
 
-Bu genel bağlamı ve {function_name} fonksiyonunun teknik arayüzünü anladıysan, henüz test yazma veya detaylı davranış analizi yapma, sadece bu yapıyı öğren ve içselleştir. Bir sonraki adıma hazır olduğunu teyit et."""
+KRİTİK UYARI: Bu adımda SADECE ve SADECE şu cümleyi yaz: "Genel bağlamı ve {function_name} fonksiyonunun teknik arayüzünü başarıyla analiz ettim. Bir sonraki adıma geçmeye hazırım."
+Başka HİÇBİR şey yazma. Kod yazma, enum tanımlama, typedef yazma, fonksiyon yazma, açıklama yapma. Sadece bu cümleyi yaz."""
 
 def get_step3_prompt(function_name, functional_behavior_doc):
     """Adım 3: Fonksiyonel Davranış ve Mantık (Spesifik Fonksiyon Detay Tasarımı)"""
@@ -103,7 +99,8 @@ Kapsamlı Detay Tasarım Belgesi: {function_name} (Bölüm 3: Fonksiyonel Davran
 
 {functional_behavior_doc}
 
-Tasarım belgesinin bu kısmını anladıysan ve bir sonraki adıma geçmek için hazırsan teyit et."""
+KRİTİK UYARI: Bu adımda SADECE ve SADECE şu cümleyi yaz: "{function_name} fonksiyonunun detaylı fonksiyonel davranışını ve içsel mantığını tam olarak anladım. Bir sonraki adıma geçmeye hazırım."
+Başka HİÇBİR şey yazma. Kod yazma, enum tanımlama, typedef yazma, fonksiyon yazma, açıklama yapma. Sadece bu cümleyi yaz."""
 
 def get_step4_prompt(function_name):
     """Adım 4: Test Tasarım Kriterleri ve Mock Davranış Kurallarını Türetme"""
@@ -139,7 +136,15 @@ Bu bölümde, aşağıdaki 'Kesinlik Kuralı'na uymalısın: Her mock kuralı, g
 
 - [Gerekiyorsa diğer bağımlı fonksiyonlar için de aynı formatı kullan.]
 
-Bu iki bölümü, yukarıdaki formatı takip ederek ve {function_name} fonksiyonuna özel detaylarla doldurarak oluşturmanı bekliyorum."""
+Bu iki bölümü, yukarıdaki formatı takip ederek ve {function_name} fonksiyonuna özel detaylarla doldurarak oluşturmanı bekliyorum.
+
+KRİTİK UYARI: Bu adımda SADECE test tasarım kriterlerini ve mock kurallarını METİN olarak üret. 
+- Kod yazma
+- Enum tanımlama  
+- Typedef yazma
+- Fonksiyon yazma
+- C kodu üretme
+Sadece analiz ve planlama METNİ üret. Yukarıdaki şablonu doldur."""
 
 def get_step5_prompt():
     """Adım 5: Statik Kontrol ve Teyit"""
@@ -157,7 +162,14 @@ Hata Durumu İlişkisi: Fonksiyonun 'Hata İşleme Mantığı'nda belirtilen her
 
 Değer Kesinliği (Value Precision): Mock davranış kurallarındaki tüm dönüş değerleri, yan etkiler ve beklenen parametreler, genel ifadeler ('bir değer', 'bir struct') yerine somut ve test edilebilir değerler (örn: 5, NULL, {'id': 123, 'status': true}, "Error message") ile mi tanımlanmış?
 
-Lütfen bu beş maddeyi kontrol ettiğini, her şeyin eksiksiz ve tutarlı olduğunu onayla. Eğer bir eksiklik fark edersen, şimdi düzelt. Onayının ardından son üretim komutunu vereceğim."""
+Lütfen bu beş maddeyi kontrol ettiğini, her şeyin eksiksiz ve tutarlı olduğunu onayla. Eğer bir eksiklik fark edersen, şimdi düzelt. Onayının ardından son üretim komutunu vereceğim.
+
+KRİTİK UYARI: Bu adımda SADECE statik kontrol sonuçlarını METİN olarak raporla. Her madde için kısa bir açıklama yap (örn: "Bağımlılık Kapsamı: Evet, tüm fonksiyon çağrıları listelenmiştir.").
+- Kod yazma
+- Enum tanımlama
+- Typedef yazma
+- Fonksiyon yazma
+Sadece kontrol sonuçlarını METİN olarak raporla."""
 
 def get_step6_prompt(function_name):
     """Adım 6: Bilgi Sıkıştırma (Re-compress & Final Briefing)"""
@@ -193,38 +205,76 @@ Temel Test Senaryoları (Kapsam):
 
 [Geçerli girdilerle başarılı çalışma yolu testi, geçersiz girdi testleri, bağımlılık hata testleri, sınır değer testleri]
 
-Bu özeti oluşturduktan sonra, başka bir şey yapmadan sadece onayı bekle."""
+Bu özeti oluşturduktan sonra, başka bir şey yapmadan sadece onayı bekle.
+
+KRİTİK UYARI: Bu adımda SADECE Final Test Brifingi'ni METİN olarak üret. Yukarıdaki şablonu doldur.
+- Kod yazma
+- Enum tanımlama
+- Typedef yazma
+- Fonksiyon yazma
+- C kodu üretme
+Sadece brifing METNİNİ üret."""
 
 def get_step7_prompt(function_name):
     """Adım 7: Üretim Komutu (Testleri Yaz!)"""
-    return f"""Harika. Lütfen şimdiye kadar verdiğim tüm bilgileri (rol tanımı, header dosyaları, {function_name} fonksiyonunun arayüzü, fonksiyonel davranışı ve senin türettiğin test tasarım kriterleri ile mock davranış kuralları) kullanarak, {function_name} fonksiyonu için Ceedling/Unity formatında tüm test senaryolarını şimdi oluştur. Her test senaryosu için uygun Unity ve CMock makrolarını kullan."""
+    return f"""Harika. Lütfen şimdiye kadar verdiğim tüm bilgileri (rol tanımı, header dosyaları, {function_name} fonksiyonunun arayüzü, fonksiyonel davranışı ve senin türettiğin test tasarım kriterleri ile mock davranış kuralları) kullanarak, {function_name} fonksiyonu için Ceedling/Unity formatında tüm test senaryolarını şimdi oluştur. Her test senaryosu için uygun Unity ve CMock makrolarını kullan.
+
+KRİTİK UYARI: Bu adımda SADECE C test kodu üret. Test dosyasını tam olarak yaz.
+- #include direktifleri
+- Unity test fonksiyonları (TEST_ASSERT_EQUAL, TEST_ASSERT_TRUE vb.)
+- CMock mock tanımları (Mock_xxx_ExpectAndReturn vb.)
+- Tüm test senaryoları
+- Enum tanımları veya header dosyaları üretme
+- Sadece test kodu üret"""
 
 # ==============================================================================
 # LLM İLE İLETİŞİM FONKSİYONU
 # ==============================================================================
 
-def send_to_llm(prompt, conversation_history=None):
+def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=None):
     """LLM'e mesaj gönder ve cevap al"""
-    # Konuşma geçmişini ekle
+    # Konuşma geçmişini akıllıca yönet - sadece son 2-3 mesajı tut
     if conversation_history:
-        full_prompt = "\n\n".join(conversation_history) + "\n\n" + prompt
+        # Son 4-6 öğeyi al (her adım 2 öğe: prompt + response)
+        recent_history = conversation_history[-6:] if len(conversation_history) > 6 else conversation_history
+        full_prompt = "\n\n".join(recent_history) + "\n\n" + prompt
     else:
         full_prompt = prompt
     
     formatted_prompt = f"### Instruction:\n{full_prompt}\n\n### Response:\n"
     
     print("\n[LLM'e gönderiliyor...]")
-    inputs = tokenizer(formatted_prompt, return_tensors="pt", truncation=True, max_length=2048).to("cuda")
+    
+    # Token limitini ayarla - input için daha fazla yer bırak
+    max_input_length = 3072  # Model'in maksimum context window'una göre ayarla
+    inputs = tokenizer(
+        formatted_prompt, 
+        return_tensors="pt", 
+        truncation=True, 
+        max_length=min(max_input_length, 2048)
+    ).to("cuda")
+    
+    # Adım numarasına göre token limitini ayarla
+    if step_number == 7:
+        # Son adımda daha uzun çıktı bekleniyor
+        token_limit = max_tokens
+    elif step_number in [1, 2, 3]:
+        # İlk adımlarda kısa onay bekleniyor
+        token_limit = 300
+    else:
+        # Diğer adımlarda orta uzunlukta
+        token_limit = 1500
     
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=1200,  # Daha uzun cevaplar için artırıldı
+            max_new_tokens=token_limit,
             temperature=0.2,
             top_p=0.9,
             do_sample=True,
             eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.eos_token_id
+            pad_token_id=tokenizer.eos_token_id,
+            repetition_penalty=1.1  # Tekrarları azalt
         )
     
     generated_text = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
@@ -232,6 +282,11 @@ def send_to_llm(prompt, conversation_history=None):
     # Response kısmını temizle
     if "### Response:" in generated_text:
         generated_text = generated_text.split("### Response:")[-1].strip()
+    
+    # Çok uzun enum tanımları gibi tekrarlı içerikleri tespit et ve uyar
+    if len(generated_text) > 2000 and ("typedef enum" in generated_text or "ENGINE_ERROR" in generated_text):
+        print("\n[UYARI: LLM çok uzun enum tanımları üretiyor, ilk 500 karakter gösteriliyor]")
+        return generated_text[:500] + "\n\n[... çıktı kesildi, muhtemelen tekrarlı enum tanımları ...]"
     
     return generated_text.strip()
 
@@ -263,7 +318,7 @@ def run_7_step_process():
     print("\nLLM'e gönderilen mesaj:")
     print(step1_prompt[:200] + "...")
     
-    response1 = send_to_llm(step1_prompt)
+    response1 = send_to_llm(step1_prompt, step_number=1)
     conversation_history.append(f"Kullanıcı: {step1_prompt}")
     conversation_history.append(f"Asistan: {response1}")
     
@@ -296,7 +351,7 @@ def run_7_step_process():
     function_interface_doc = "\n".join(interface_lines)
     
     step2_prompt = get_step2_prompt(header_files_content, function_name, function_interface_doc)
-    response2 = send_to_llm(step2_prompt, conversation_history)
+    response2 = send_to_llm(step2_prompt, conversation_history, step_number=2)
     conversation_history.append(f"Kullanıcı: {step2_prompt}")
     conversation_history.append(f"Asistan: {response2}")
     
@@ -319,7 +374,7 @@ def run_7_step_process():
     functional_behavior_doc = "\n".join(behavior_lines)
     
     step3_prompt = get_step3_prompt(function_name, functional_behavior_doc)
-    response3 = send_to_llm(step3_prompt, conversation_history)
+    response3 = send_to_llm(step3_prompt, conversation_history, step_number=3)
     conversation_history.append(f"Kullanıcı: {step3_prompt}")
     conversation_history.append(f"Asistan: {response3}")
     
@@ -333,7 +388,7 @@ def run_7_step_process():
     print("\n[ADIM 4/7] Test Tasarım Kriterleri ve Mock Davranış Kurallarını Türetme")
     print("-" * 50)
     step4_prompt = get_step4_prompt(function_name)
-    response4 = send_to_llm(step4_prompt, conversation_history)
+    response4 = send_to_llm(step4_prompt, conversation_history, step_number=4)
     conversation_history.append(f"Kullanıcı: {step4_prompt}")
     conversation_history.append(f"Asistan: {response4}")
     
@@ -347,7 +402,7 @@ def run_7_step_process():
     print("\n[ADIM 5/7] Statik Kontrol ve Teyit")
     print("-" * 50)
     step5_prompt = get_step5_prompt()
-    response5 = send_to_llm(step5_prompt, conversation_history)
+    response5 = send_to_llm(step5_prompt, conversation_history, step_number=5)
     conversation_history.append(f"Kullanıcı: {step5_prompt}")
     conversation_history.append(f"Asistan: {response5}")
     
@@ -361,7 +416,7 @@ def run_7_step_process():
     print("\n[ADIM 6/7] Bilgi Sıkıştırma (Final Briefing)")
     print("-" * 50)
     step6_prompt = get_step6_prompt(function_name)
-    response6 = send_to_llm(step6_prompt, conversation_history)
+    response6 = send_to_llm(step6_prompt, conversation_history, step_number=6)
     conversation_history.append(f"Kullanıcı: {step6_prompt}")
     conversation_history.append(f"Asistan: {response6}")
     
@@ -375,7 +430,7 @@ def run_7_step_process():
     print("\n[ADIM 7/7] Test Kodunu Üretme")
     print("-" * 50)
     step7_prompt = get_step7_prompt(function_name)
-    response7 = send_to_llm(step7_prompt, conversation_history)
+    response7 = send_to_llm(step7_prompt, conversation_history, step_number=7, max_tokens=2500)
     
     print("\n" + "="*50)
     print(" ÜRETİLEN TEST KODU")
@@ -395,7 +450,7 @@ def run_7_step_process():
             f.write("7 ADIMLI TEST ÜRETİM SÜRECİ - SONUÇLAR\n")
             f.write("="*50 + "\n\n")
             
-            for i, (prompt, response) in enumerate([
+            steps_data = [
                 ("Adım 1: Girizgah", step1_prompt, response1),
                 ("Adım 2: Çevreyi Tanımlama", step2_prompt, response2),
                 ("Adım 3: Fonksiyonel Davranış", step3_prompt, response3),
@@ -403,10 +458,13 @@ def run_7_step_process():
                 ("Adım 5: Statik Kontrol", step5_prompt, response5),
                 ("Adım 6: Final Briefing", step6_prompt, response6),
                 ("Adım 7: Test Kodu", step7_prompt, response7),
-            ], 1):
+            ]
+            
+            for i, (title, prompt, response) in enumerate(steps_data, 1):
                 f.write(f"\n{'='*50}\n")
-                f.write(f"{i}. {prompt}\n")
+                f.write(f"{i}. {title}\n")
                 f.write(f"{'='*50}\n\n")
+                f.write(f"[Prompt]:\n{prompt[:500]}...\n\n")
                 f.write(f"[LLM Cevabı]:\n{response}\n\n")
             
             f.write("\n" + "="*50 + "\n")

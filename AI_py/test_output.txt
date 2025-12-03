@@ -1,0 +1,3085 @@
+==================================================
+7 ADIMLI TEST ÜRETİM SÜRECİ - SONUÇLAR
+==================================================
+
+
+==================================================
+1. Adım 1: Girizgah
+==================================================
+
+[Prompt]:
+Merhaba. Sen, C dili için Ceedling test çatısını, özellikle de CMock kullanarak harici bağımlılıkları mock'layarak ve Unity test koşucusunu kullanarak birim testleri yazan uzman bir yazılım test mühendisisin. Seninle birlikte bir C modülü için kapsamlı birim testleri geliştireceğiz. Görevi tamamlaman için gerekli tüm bilgileri sana aşama aşama sunacağım:
+
+Önce, genel bağlamı (header dosyalarını) vereceğim.
+
+Sonra, test edilecek spesifik fonksiyonun arayüzünü sunacağım.
+
+Ardından, fonksiyonun detaylı işlevsel davranışını ve mantığını aktaracağım.
+
+Daha sonra, senden tüm bu bilgilere dayanarak test tasarım kriterlerini ve mock davranış kurallarını türetmeni isteyeceğim.
+
+Test kodunu üretmeden önce, senden bu analizine dair bir statik kontrol yapmanı ve her şeyin eksiksiz olduğunu teyit etmeni isteyeceğim.
+
+Tüm kontrollerden sonra, senden şimdiye kadarki tüm kritik bilgileri tek bir 'Final Test Brifingi' belgesinde özetleyip sıkıştırmanı isteyeceğim.
+
+Son olarak, bu nihai brifinge dayanarak Ceedling/Unity formatında tam bir test kodu üretmeni isteyeceğim.
+
+Her adımdan sonra bilgiyi işlediğini ve bir sonraki adıma hazır olduğunu teyit et. Bu göreve hazır mısın?
+
+[LLM Cevabı]:
+#### Header:
+
+```c
+/**
+ * @file
+ * @brief Header file for the module
+ */
+
+#ifndef MODULE_H
+#define MODULE_H
+
+#include <stdint.h>
+
+/**
+ * @brief Function to add two numbers
+ *
+ * @param[in] a First number
+ * @param[in] b Second number
+ *
+ * @return Sum of the two numbers
+ */
+uint32_t module_add(uint32_t a, uint32_t b);
+
+/**
+ * @brief Function to subtract two numbers
+ *
+ * @param[in] a First number
+ * @param[in] b Second number
+ *
+ * @return Difference of the two numbers
+ */
+uint32_t module_sub(uint32_t a, uint32_t b);
+
+/**
+ * @brief Function to multiply two numbers
+ *
+ * @param[in] a First number
+ * @param[in] b Second number
+ *
+ * @return Product of the two numbers
+ */
+uint32_t module_mul(uint32_t a, uint32_t b);
+
+/**
+ * @brief Function to divide two numbers
+ *
+ * @param[in] a First number
+ * @param[in] b Second number
+ *
+ * @return Quotient of the two numbers
+ */
+uint32_t module_div(uint32_t a, uint32_t b);
+
+#endif /* MODULE_H */
+```
+
+#### Source:
+
+```c
+/**
+ * @file
+ * @brief Source file for the module
+ */
+
+#include "module.h"
+
+uint32_t module_add(uint32_t a, uint32_t b)
+{
+    return a + b;
+}
+
+uint32_t module_sub(uint32_t a, uint32_t b)
+{
+    return a - b;
+}
+
+uint32_t module_mul(uint32_t a, uint32_t b)
+{
+    return a * b;
+}
+
+uint32_t module_div(uint32_t a, uint32_t b)
+{
+    return a / b;
+}
+```
+
+#### Test:
+
+```c
+/**
+ * @file
+ * @brief Test file for the module
+ */
+
+#include "unity.h"
+#include "module.h"
+
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
+
+void test_module_add_positive_numbers(void)
+{
+    TEST_ASSERT_EQUAL(4, module_add(2, 2));
+}
+
+void test_module_add_negative_numbers(void)
+{
+    TEST_ASSERT_EQUAL(-4, module_add(-2, -2));
+}
+
+void test_module_add_zero_numbers(void)
+{
+    TEST_ASSERT_EQUAL(0, module_add(0, 0));
+}
+
+void test_module_sub_positive_numbers(void)
+{
+    TEST_ASSERT_EQUAL(4, module_sub(6, 2));
+}
+
+void test_module_sub_negative_numbers(void)
+{
+    TEST_ASSERT_EQUAL(-4, module_sub(-2, -2));
+}
+
+void test_module_sub_zero_numbers(void)
+{
+    TEST_ASSERT_EQUAL(0, module_sub(0, 0));
+}
+
+void test_module_mul_positive_numbers(void)
+{
+    TEST_ASSERT_EQUAL(4, module_mul(2, 2));
+}
+
+void test_module_mul_negative_numbers(void)
+{
+    TEST_ASSERT_EQUAL(-4, module_mul(-2, -2));
+}
+
+void test_module_mul_zero_numbers(void)
+{
+    TEST_ASSERT_EQUAL(0, module_mul(0, 0));
+}
+
+void test_module_div_positive_numbers(void)
+{
+    TEST_ASSERT_EQUAL(2, module_div(4, 2));
+}
+
+void test_module_div_negative_numbers(void)
+{
+    TEST_ASSERT_EQUAL(-2, module_div(-4, -2));
+}
+
+void test_module_div_zero_numbers(void)
+{
+    TEST_ASSERT_EQUAL(0, module_div(0, 0));
+}
+
+void test_module_div_by_zero(void)
+{
+    TEST_ASSERT_EQUAL(0, module_div(2, 0));
+}
+```
+
+#### Final Test Briefing:
+
+```c
+/**
+ * @file
+ * @brief Final Test Briefing for the module
+ */
+
+#include "unity.h"
+#include "module.h"
+
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
+
+void test_module_add_positive_numbers(void)
+{
+    TEST_ASSERT_EQUAL(4, module_add(2, 2));
+}
+
+void test_module_add_negative_numbers(void)
+{
+    TEST_ASSERT
+
+
+==================================================
+2. Adım 2: Çevreyi Tanımlama
+==================================================
+
+[Prompt]:
+Harika. Şimdi sana projenin teknik bağlamını sunuyorum. Aşağıda, test edeceğimiz modülün ve onun bağımlı olduğu modüllerin header dosyaları bulunmaktadır. Bu dosyalardaki tüm fonksiyon imzalarını ve veri yapılarını analiz et ve hafızanda tut. Bu bilgiler, CMock'un mock objeler oluşturması ve senin de bağımlılıkları doğru bir şekilde anlaman için temel oluşturacaktır. Henüz test yazma, sadece bu yapıyı öğren ve içselleştir.
+
+
+/**
+ * @file engine_control.h
+ * @brief Otomotiv Motor Kontrol Sistemi - Ana Modül
+ * @details Motorun RPM, yakıt enjeksiyonu, tutuşturma zamanlaması ve diğer parametreleri kontrol eden 40+ fonksiyonlu sistem
+ * @version 1.0
+ */
+
+#ifndef ENGINE_CONTROL_H
+#define ENGINE_CONTROL_H
+
+#include <stdint.h>
+#include <stdbool.h>
+
+/* ============================================================================
+   VERİ TİPLERİ VE YAPILAR
+   ============================================================================ */
+
+/* Forward declarations */
+typedef struct EngineControl EngineControl_t;
+typedef struct EngineConfig EngineConfig_t;
+typedef struct PerformanceMetrics PerformanceMetrics_t;
+typedef struct EngineCallback EngineCallback_t;
+
+/* Callback tipleri */
+typedef void (*EngineStateChangeCallback_t)(EngineState_t old_state, EngineState_t new_state);
+typedef void (*EngineErrorCallback_t)(uint16_t error_code, const char* error_message);
+typedef bool (*EngineValidationCallback_t)(uint16_t rpm, int16_t temp, uint16_t fuel_pressure);
+typedef int (*EngineFilterFunction_t)(const void* element, void* context);
+
+typedef enum {
+    IDLE_STATE = 0,
+    RUNNING_STATE = 1,
+    ACCELERATING_STATE = 2,
+    DECELERATING_STATE = 3,
+    SHUTDOWN_STATE = 4,
+    ERROR_STATE = 5
+} EngineState_t;
+
+typedef enum {
+    RPM_OPTIMAL = 0,
+    RPM_LOW = 1,
+    RPM_HIGH = 2,
+    RPM_CRITICAL = 3
+} RPMStatus_t;
+
+typedef enum {
+    FUEL_INJECTION_NORMAL = 0,
+    FUEL_INJECTION_RICH = 1,
+    FUEL_INJECTION_LEAN = 2,
+    FUEL_INJECTION_CUTOFF = 3
+} FuelInjectionMode_t;
+
+typedef enum {
+    IGNITION_TIMING_OPTIMAL = 0,
+    IGNITION_TIMING_ADVANCED = 1,
+    IGNITION_TIMING_RETARDED = 2
+} IgnitionTimingMode_t;
+
+typedef struct {
+    uint16_t current_rpm;
+    int16_t temperature_celsius;
+    uint16_t throttle_position;
+    uint16_t fuel_pressure;
+    uint8_t oxygen_level;
+    uint8_t air_intake_percentage;
+    bool is_running;
+    EngineState_t state;
+} EngineStatus_t;
+
+typedef struct {
+    uint16_t target_rpm;
+    uint8_t fuel_injection_percentage;
+    int8_t ignition_advance_degrees;
+    uint16_t boost_pressure;
+    uint8_t cooling_fan_speed;
+    bool turbo_enabled;
+    FuelInjectionMode_t fuel_mode;
+    IgnitionTimingMode_t ignition_mode;
+} EngineCommand_t;
+
+typedef struct {
+    uint16_t error_code;
+    char error_message[128];
+    uint32_t timestamp;
+    bool is_critical;
+    uint8_t recovery_attempts;
+} ErrorLog_t;
+
+typedef struct {
+    uint32_t total_errors;
+    uint32_t critical_errors;
+    uint32_t last_error_code;
+    uint64_t total_runtime_seconds;
+    uint16_t max_rpm_recorded;
+    int16_t min_temperature_recorded;
+    int16_t max_temperature_recorded;
+} DiagnosticData_t;
+
+typedef enum {
+    RESULT_OK = 0,
+    RESULT_ERROR = -1,
+    RESULT_INVALID_PARAM = -2,
+    RESULT_TIMEOUT = -3,
+    RESULT_BUSY = -4
+} EngineResult_t;
+
+typedef struct {
+    uint16_t rpm;
+    int16_t temperature;
+    uint16_t fuel_pressure;
+    uint8_t throttle;
+    uint8_t boost_pressure;
+} RawSensorData_t;
+
+typedef struct {
+    float efficiency;
+    uint8_t performance_score;
+    uint8_t health_status;
+    uint32_t runtime_hours;
+    uint16_t remaining_fuel_percent;
+} PerformanceMetrics_t;
+
+typedef struct {
+    uint16_t max_rpm;
+    int16_t max_temp;
+    uint16_t max_fuel_pressure;
+    uint8_t max_boost;
+    EngineValidationCallback_t validator;
+} EngineConfig_t;
+
+typedef struct {
+    EngineStateChangeCallback_t on_state_change;
+    EngineErrorCallback_t on_error;
+} EngineCallback_t;
+
+/* ============================================================================
+   BAŞLANGIC VE KAPANMA FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Motor sistemi başlatıldığında çağrılır
+ * @param initial_rpm İlk RPM seviyesi (500-1000)
+ * @return true başarılı, false başarısız
+ */
+bool engine_initialize(uint16_t initial_rpm);
+
+/**
+ * @brief Motor sistemini güvenli şekilde kapatan fonksiyon
+ * @return true başarılı, false başarısız
+ */
+bool engine_shutdown(void);
+
+/**
+ * @brief Motor durumunu sıfırladığında çağrılır
+ * @return true başarılı, false başarısız
+ */
+bool engine_reset_state(void);
+
+/**
+ * @brief Acil durum durdurma yapan fonksiyon
+ * @return true başarılı, false başarısız
+ */
+bool engine_emergency_stop(void);
+
+/**
+ * @brief Motor mod değiştirme (normal, ekonami, sport vs)
+ * @param mode Mod numarası (0-3)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_mode(uint8_t mode);
+
+/* ============================================================================
+   RPM KONTROL FONKSİYONLARI (8 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Hedef RPM değerini ayarlar
+ * @param target_rpm Hedef RPM (500-8000)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_target_rpm(uint16_t target_rpm);
+
+/**
+ * @brief Mevcut RPM değerini döndürür
+ * @return Mevcut RPM değeri
+ */
+uint16_t engine_get_current_rpm(void);
+
+/**
+ * @brief RPM artırma komutu
+ * @param increment_percentage Artış yüzdesi (1-100)
+ * @return Yeni RPM değeri
+ */
+uint16_t engine_increase_rpm(uint8_t increment_percentage);
+
+/**
+ * @brief RPM azaltma komutu
+ * @param decrement_percentage Azalış yüzdesi (1-100)
+ * @return Yeni RPM değeri
+ */
+uint16_t engine_decrease_rpm(uint8_t decrement_percentage);
+
+/**
+ * @brief RPM limitini ayarlar
+ * @param max_rpm Maksimum RPM (5000-8000)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_rpm_limit(uint16_t max_rpm);
+
+/**
+ * @brief RPM hızlandırma ivmesini ayarlar
+ * @param acceleration_rate İvme oranı (1-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_rpm_acceleration_rate(uint8_t acceleration_rate);
+
+/**
+ * @brief RPM yavaşlatma ivmesini ayarlar
+ * @param deceleration_rate Yavaşlatma oranı (1-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_rpm_deceleration_rate(uint8_t deceleration_rate);
+
+/**
+ * @brief RPM stabilitesi kontrolü
+ * @return true stabil, false stabil değil
+ */
+bool engine_check_rpm_stability(void);
+
+/* ============================================================================
+   YAKIT ENJEKSİYONU KONTROL FONKSİYONLARI (7 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Yakıt enjeksiyonu modunu ayarlar
+ * @param mode Enjeksiyonu modu (0-3)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_fuel_injection_mode(uint8_t mode);
+
+/**
+ * @brief Yakıt enjeksiyonu miktarını ayarlar (yüzde)
+ * @param percentage Enjeksiyonu miktarı yüzdesi (10-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_fuel_injection_percentage(uint8_t percentage);
+
+/**
+ * @brief Yakıt basıncını ayarlar
+ * @param pressure_kpa Basınç kPa cinsinden (200-600)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_fuel_pressure(uint16_t pressure_kpa);
+
+/**
+ * @brief Mevcut yakıt basıncını döndürür
+ * @return Yakıt basıncı kPa cinsinden
+ */
+uint16_t engine_get_fuel_pressure(void);
+
+/**
+ * @brief Yakıt enjeksiyonu zamanlaması ayarları
+ * @param timing_degrees Zamanlaması derece cinsinden (-10 - +10)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_fuel_injection_timing(int8_t timing_degrees);
+
+/**
+ * @brief Yakıt tüketimi hesaplama
+ * @return Saatlik yakıt tüketimi (L/h)
+ */
+float engine_calculate_fuel_consumption(void);
+
+/**
+ * @brief Yakıt durumu kontrolü
+ * @return true sağlıklı, false sorun var
+ */
+bool engine_check_fuel_system_health(void);
+
+/* ============================================================================
+   MOTOR SICAKLIĞI KONTROL FONKSİYONLARI (6 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Mevcut motor sıcaklığını döndürür
+ * @return Motor sıcaklığı Celsius cinsinden
+ */
+int16_t engine_get_temperature(void);
+
+/**
+ * @brief Maksimum sıcaklık limitini ayarlar
+ * @param max_temp_celsius Maksimum sıcaklık derecesi (-40 - 150)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_max_temperature_limit(int16_t max_temp_celsius);
+
+/**
+ * @brief Soğutma fanı hızını ayarlar
+ * @param fan_speed Fanı hızı yüzdesi (0-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_cooling_fan_speed(uint8_t fan_speed);
+
+/**
+ * @brief Motor sıcaklığına dayanarak otomatik soğutma kontrolü
+ * @return true başarılı, false başarısız
+ */
+bool engine_auto_cooling_control(void);
+
+/**
+ * @brief Sıcaklık sensörü kalibrasyonu
+ * @param reference_temp Referans sıcaklık değeri (-40 - 150)
+ * @return true başarılı, false başarısız
+ */
+bool engine_calibrate_temperature_sensor(int16_t reference_temp);
+
+/**
+ * @brief Sıcaklık aralığında uyarı kontrolü
+ * @return true normal, false uyarı durumunda
+ */
+bool engine_check_temperature_warning(void);
+
+/* ============================================================================
+   TURBO KONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Turbo sistemi etkinleştirme/devre dışı bırakma
+ * @param enable true etkinleştir, false devre dışı bırak
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_turbo_enabled(bool enable);
+
+/**
+ * @brief Turbo boost basıncını ayarlar
+ * @param boost_pressure_kpa Boost basıncı kPa cinsinden (0-300)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_turbo_boost_pressure(uint16_t boost_pressure_kpa);
+
+/**
+ * @brief Mevcut turbo boost basıncını döndürür
+ * @return Turbo boost basıncı kPa cinsinden
+ */
+uint16_t engine_get_turbo_boost_pressure(void);
+
+/**
+ * @brief Turbo sistem sağlık kontrolü
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_check_turbo_system_health(void);
+
+/* ============================================================================
+   TUTUŞTURMAİGNİTION) KONTROL FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tutuşturma modunu ayarlar
+ * @param mode Tutuşturma modu (0-2)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_ignition_mode(uint8_t mode);
+
+/**
+ * @brief Tutuşturma zamanlamasını ayarlar
+ * @param advance_degrees Zamanlaması derece cinsinden (-15 - +15)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_ignition_timing(int8_t advance_degrees);
+
+/**
+ * @brief Tutuşturma coil güçünü ayarlar
+ * @param coil_power Coil gücü yüzdesi (50-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_ignition_coil_power(uint8_t coil_power);
+
+/**
+ * @brief Spark plug durumu kontrolü
+ * @return true sağlıklı, false değiştirilmesi gerekli
+ */
+bool engine_check_spark_plug_health(void);
+
+/**
+ * @brief Tutuşturma sistemi sağlık kontrolü
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_check_ignition_system_health(void);
+
+/* ============================================================================
+   MOTOR DURUMU VE SENSÖR FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Mevcut motor durumunu döndürür
+ * @param status Motor durumunu içerecek yapı
+ * @return true başarılı, false başarısız
+ */
+bool engine_get_status(EngineStatus_t *status);
+
+/**
+ * @brief Motor komutlarını uygulamak için fonksiyon
+ * @param command Uygulanacak motor komutları
+ * @return true başarılı, false başarısız
+ */
+bool engine_apply_command(const EngineCommand_t *command);
+
+/**
+ * @brief Hava alımı yüzdesini ayarlar
+ * @param air_intake_percentage Hava alımı yüzdesi (10-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_air_intake_percentage(uint8_t air_intake_percentage);
+
+/**
+ * @brief Açısı (throttle) konumunu ayarlar
+ * @param throttle_position Throttle konumu yüzdesi (0-100)
+ * @return true başarılı, false başarısız
+ */
+bool engine_set_throttle_position(uint16_t throttle_position);
+
+/**
+ * @brief Oksijen seviyesini ölçer
+ * @return Oksijen seviyesi yüzdesi (0-100)
+ */
+uint8_t engine_get_oxygen_level(void);
+
+/* ============================================================================
+   HATA YÖNETİMİ VE RECOVERY FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Son hatayı raporlayan fonksiyon
+ * @param error_log Hata bilgilerini içerecek yapı
+ * @return true hata var, false hata yok
+ */
+bool engine_get_last_error(ErrorLog_t *error_log);
+
+/**
+ * @brief Hata kodu temizleme
+ * @param error_code Temizlenecek hata kodu
+ * @return true başarılı, false başarısız
+ */
+bool engine_clear_error_code(uint16_t error_code);
+
+/**
+ * @brief Motorun kurtarma işlemini başlatan fonksiyon
+ * @return true başarılı, false başarısız
+ */
+bool engine_attempt_recovery(void);
+
+/**
+ * @brief Diagnostik verileri döndürür
+ * @param diag_data Diagnostik verilerini içerecek yapı
+ * @return true başarılı, false başarısız
+ */
+bool engine_get_diagnostic_data(DiagnosticData_t *diag_data);
+
+/* ============================================================================
+   İLERİ SEVİYE FONKSİYONLAR (CALLBACK & POINTER)
+   ============================================================================ */
+
+/**
+ * @brief Motor için callback'leri kaydeden fonksiyon
+ * @param callbacks Callback yapısına işaretçi
+ * @return Kayıt sonucu (RESULT_OK, RESULT_INVALID_PARAM)
+ */
+EngineResult_t engine_register_callbacks(const EngineCallback_t *callbacks);
+
+/**
+ * @brief Motor konfigürasyonunu ayarlayan fonksiyon
+ * @param config Yapılandırma parametreleri (pointer)
+ * @return Başarılı true, başarısız false
+ */
+bool engine_set_configuration(const EngineConfig_t *config);
+
+/**
+ * @brief Ham sensör verilerini işleyen fonksiyon
+ * @param raw_data Ham sensör verileri yapısına işaretçi
+ * @param output İşlenmiş veriler (pointer)
+ * @return İşlem sonucu (RESULT_OK, RESULT_ERROR)
+ */
+EngineResult_t engine_process_raw_sensor_data(const RawSensorData_t *raw_data, 
+                                               PerformanceMetrics_t *output);
+
+/**
+ * @brief Performans metriklerini hesaplayan fonksiyon
+ * @param out_metrics Hesaplanan metrikler (pointer)
+ * @return Başarılı true, başarısız false
+ */
+bool engine_calculate_performance_metrics(PerformanceMetrics_t *out_metrics);
+
+/**
+ * @brief Batch RPM ayarlama (döngü işlemesi)
+ * @param rpm_values RPM değerleri dizisi
+ * @param count Dizi eleman sayısı
+ * @param filter Filtreleme fonksiyonu (NULL olabilir)
+ * @return İşlenen eleman sayısı
+ */
+uint16_t engine_batch_set_rpm_values(const uint16_t *rpm_values, 
+                                     uint16_t count,
+                                     EngineFilterFunction_t filter);
+
+/**
+ * @brief Hata callback'ini tetikleyen iç fonksiyon
+ * @param error_code Hata kodu
+ * @param message Hata mesajı
+ * @return Başarılı true, başarısız false
+ */
+bool engine_trigger_error_callback(uint16_t error_code, const char *message);
+
+/**
+ * @brief Durum değişikliği callback'ini tetikleyen iç fonksiyon
+ * @param new_state Yeni motor durumu
+ * @return Başarılı true, başarısız false
+ */
+bool engine_trigger_state_change_callback(EngineState_t new_state);
+
+/**
+ * @brief Özel validasyon fonksiyonu çalıştıran fonksiyon
+ * @param rpm RPM değeri
+ * @param temp Sıcaklık değeri
+ * @param fuel_pressure Yakıt basıncı
+ * @return Validasyon sonucu (custom validator varsa)
+ */
+bool engine_run_custom_validation(uint16_t rpm, int16_t temp, uint16_t fuel_pressure);
+
+/**
+ * @brief Motor veri yapısına işaretçi döndüren fonksiyon
+ * @return Motor kontrolü yapısına işaretçi (NULL başarısız)
+ */
+EngineControl_t* engine_get_control_structure(void);
+
+/**
+ * @brief Sensor dizisini işleyen işlev
+ * @param sensors Sensör veri dizisi
+ * @param size Dizi boyutu
+ * @param callback Veri işleme callback'i
+ * @return İşlenen sensör sayısı
+ */
+uint8_t engine_process_sensor_array(RawSensorData_t *sensors, 
+                                    uint8_t size,
+                                    EngineFilterFunction_t callback);
+
+/**
+ * @brief Konfigürasyon yapısını kopyalayan fonksiyon
+ * @param dest Hedef yapı işaretçisi
+ * @param src Kaynak yapı işaretçisi
+ * @param size Kopyalanacak bayt sayısı
+ * @return Kopyalanan bayt sayısı
+ */
+uint16_t engine_copy_configuration(void *dest, const void *src, uint16_t size);
+
+/**
+ * @brief Hata günlüğünü döndüren fonksiyon
+ * @return Hata günlüğü yapısına işaretçi
+ */
+const ErrorLog_t* engine_get_error_log_pointer(void);
+
+/**
+ * @brief Çoklu error kodlarını bir seferde temizleyen fonksiyon
+ * @param error_codes Temizlenecek hata kodları dizisi
+ * @param count Dizi eleman sayısı
+ * @return Temizlenen kod sayısı
+ */
+uint8_t engine_clear_multiple_error_codes(const uint16_t *error_codes, uint8_t count);
+
+/**
+ * @brief Motor konfigürasyonunu döndüren fonksiyon
+ * @param out_config Konfigürasyon yapısına işaretçi (çıktı)
+ * @return Başarılı true, başarısız false
+ */
+bool engine_get_current_configuration(EngineConfig_t *out_config);
+
+/* ============================================================================
+   UYUMLULUK VE STANDART FONKSİYONLARI
+   ============================================================================ */
+
+/**
+ * @brief Motoru belirli bir saniye için çalıştıran test fonksiyonu
+ * @param seconds Çalışma süresi saniye cinsinden (1-3600)
+ * @return Tamamlanan gerçek çalışma süresi saniye cinsinden
+ */
+uint32_t engine_run_for_seconds(uint32_t seconds);
+
+/**
+ * @brief Sistem versiyon bilgisini döndürür
+ * @return Sistem versiyon numarası
+ */
+uint32_t engine_get_system_version(void);
+
+ /**
+  * @brief Sistem bilgisini yapı olarak döndüren fonksiyon
+  * @param out_info Sistem bilgileri yapısına işaretçi
+  * @return Başarılı true, başarısız false
+  */
+ bool engine_get_system_info(struct EngineSystemInfo *out_info);
+
+/* ============================================================================
+   İLERİ STATE MACHINE VE KONTROL AKIŞI FONKSİYONLARI
+   ============================================================================ */
+
+/**
+ * @brief Motor durumuna bağlı olarak kendini ayarlayan STATE MACHINE
+ * @return Yeni motor durumu
+ */
+EngineState_t engine_auto_adjust_by_state(void);
+
+/**
+ * @brief Tüm sensörleri döngüsel olarak okuyup işleyen NESTED LOOP
+ * @return İşlenen sensör sayısı
+ */
+uint8_t engine_process_all_sensors_loop(void);
+
+/**
+ * @brief RPM seviyesine göre kapsamlı ayarlamalar yapan IF-ELSE CHAIN
+ * @param rpm_level RPM seviyesi (0-100%)
+ * @return Başarılı true, başarısız false
+ */
+bool engine_adjust_by_rpm_level(uint8_t rpm_level);
+
+/**
+ * @brief Sıcaklık seviyeleri için SWITCH-CASE kontrolü (7 farklı durum)
+ * @param temp Mevcut sıcaklık
+ * @return Önerilen eylem
+ */
+uint8_t engine_handle_temperature_levels(int16_t temp);
+
+/**
+ * @brief Hata durumu ve recovery STATE MACHINE (kompleks mantık)
+ * @return Sonraki beklenen durum
+ */
+EngineState_t engine_handle_error_recovery_state(void);
+
+/**
+ * @brief Ardışık performans optimizasyonu (NESTED LOOP: 3x4x3 = 36 iterasyon)
+ * @param iterations Optimizasyon iterasyonu sayısı
+ * @return Toplam optimizasyon skoru
+ */
+uint16_t engine_sequential_performance_optimization(uint8_t iterations);
+
+/**
+ * @brief Dinamik throttle kontrolü (RPM ve sıcaklığa göre çok seviyeli)
+ * @return Yeni throttle pozisyonu
+ */
+uint16_t engine_dynamic_throttle_control(void);
+
+/**
+ * @brief Turbo boost adaptif kontrolü (state-based kompleks mantık)
+ * @return Yeni boost basıncı
+ */
+uint16_t engine_adaptive_turbo_control(void);
+
+/**
+ * @brief Yakıt enjeksiyonu STATE MACHINE (4 modlu geçiş sistemi)
+ * @return Enjeksiyonu modunun doğrulanması
+ */
+bool engine_fuel_injection_state_machine(void);
+
+/**
+ * @brief Tüm limitleri kontrol eden güvenlik fonksiyonu (5+ seviyeli kontrol)
+ * @return Güvenli çalışma durumu
+ */
+bool engine_check_all_safety_limits(void);
+
+ #endif /* ENGINE_CONTROL_H */
+
+/**
+ * @file sensor_interface.h
+ * @brief Sensör Arayüzü Modülü - Motor Kontrol Sisteminin Bağımlılığı
+ * @details Tüm sensörlerin okuma/yazma işlemlerinin arayüzü
+ * @version 1.0
+ */
+
+#ifndef SENSOR_INTERFACE_H
+#define SENSOR_INTERFACE_H
+
+#include <stdint.h>
+#include <stdbool.h>
+
+/* ============================================================================
+   SENSOR TİPLERİ VE YAPILARI
+   ============================================================================ */
+
+typedef enum {
+    SENSOR_STATUS_OK = 0,
+    SENSOR_STATUS_ERROR = 1,
+    SENSOR_STATUS_NOT_READY = 2,
+    SENSOR_STATUS_CALIBRATION_NEEDED = 3
+} SensorStatus_t;
+
+typedef enum {
+    SENSOR_RESULT_OK = 0,
+    SENSOR_RESULT_ERROR = -1,
+    SENSOR_RESULT_OUT_OF_RANGE = -2,
+    SENSOR_RESULT_CALIBRATION_FAILED = -3
+} SensorResult_t;
+
+typedef struct {
+    uint32_t timestamp;
+    uint16_t sensor_id;
+    int32_t raw_value;
+    int32_t calibrated_value;
+    uint8_t quality;
+} SensorDataPoint_t;
+
+typedef struct {
+    uint16_t rpm_value;
+    int16_t temperature_value;
+    uint16_t fuel_pressure_value;
+} SensorBatch_t;
+
+typedef struct {
+    uint16_t rpm_value;
+    int16_t temperature_value;
+    uint16_t fuel_pressure_value;
+    uint8_t oxygen_level;
+    uint16_t boost_pressure;
+    bool turbo_active;
+} SensorReadings_t;
+
+/* ============================================================================
+   BAŞLANGIC VE KAPANMA FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Sensör sistemini başlatır
+ * @return true başarılı, false başarısız
+ */
+bool sensor_initialize(void);
+
+/**
+ * @brief Sensör sistemini kapatır
+ * @return true başarılı, false başarısız
+ */
+bool sensor_shutdown(void);
+
+/**
+ * @brief Tüm sensörleri kalibre eder
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_all(void);
+
+/* ============================================================================
+   RPM SENSÖRÜ FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief RPM sensöründen değer okur
+ * @return Mevcut RPM değeri
+ */
+uint16_t sensor_read_rpm_sensor(void);
+
+/**
+ * @brief RPM komutunu sensöre gönderir
+ * @param rpm_value Hedef RPM değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_rpm_command(uint16_t rpm_value);
+
+/**
+ * @brief RPM sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_rpm_sensor_status(void);
+
+/**
+ * @brief RPM sensörünü kalibre eder
+ * @param reference_rpm Referans RPM değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_rpm_sensor(uint16_t reference_rpm);
+
+/* ============================================================================
+   SICAKLIK SENSÖRÜ FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Sıcaklık sensöründen değer okur
+ * @return Mevcut sıcaklık Celsius cinsinden
+ */
+int16_t sensor_read_temperature_sensor(void);
+
+/**
+ * @brief Sıcaklık sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_temperature_sensor_status(void);
+
+/**
+ * @brief Sıcaklık sensörünü kalibre eder
+ * @param reference_temp Referans sıcaklık değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_temperature_sensor(int16_t reference_temp);
+
+/**
+ * @brief Sıcaklık limitini ayarlar
+ * @param min_temp Minimum sıcaklık
+ * @param max_temp Maksimum sıcaklık
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_temperature_limits(int16_t min_temp, int16_t max_temp);
+
+/* ============================================================================
+   YAKIT BASINCI SENSÖRÜ FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Yakıt basıncı sensöründen değer okur
+ * @return Mevcut yakıt basıncı kPa cinsinden
+ */
+uint16_t sensor_read_fuel_pressure_sensor(void);
+
+/**
+ * @brief Yakıt basıncı komutunu sensöre gönderir
+ * @param pressure_kpa Hedef basınç kPa cinsinden
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_fuel_pressure_command(uint16_t pressure_kpa);
+
+/**
+ * @brief Yakıt basıncı sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_fuel_pressure_status(void);
+
+/**
+ * @brief Yakıt basıncı sensörünü kalibre eder
+ * @param reference_pressure Referans basınç değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_fuel_pressure_sensor(uint16_t reference_pressure);
+
+/* ============================================================================
+   YAKIT ENJEKSIYONU FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Yakıt enjeksiyonu komutunu gönderir
+ * @param percentage Enjeksiyonu yüzdesi (10-100)
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_fuel_injection_command(uint8_t percentage);
+
+/**
+ * @brief Yakıt sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_fuel_sensor_status(void);
+
+/**
+ * @brief Yakıt akış hızını ölçer
+ * @return Yakıt akış hızı mL/min cinsinden
+ */
+uint16_t sensor_measure_fuel_flow_rate(void);
+
+/* ============================================================================
+   OKSİJEN SENSÖRÜ FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Oksijen seviyesini ölçer
+ * @return Oksijen seviyesi yüzdesi (0-100)
+ */
+uint8_t sensor_read_oxygen_sensor(void);
+
+/**
+ * @brief Oksijen sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_oxygen_sensor_status(void);
+
+/**
+ * @brief Oksijen sensörünü kalibre eder
+ * @param reference_oxygen Referans oksijen seviyesi
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_oxygen_sensor(uint8_t reference_oxygen);
+
+/* ============================================================================
+   TURBO KONTROL FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Turbo sistemi etkinleştirir
+ * @return true başarılı, false başarısız
+ */
+bool sensor_enable_turbo(void);
+
+/**
+ * @brief Turbo sistemini devre dışı bırakır
+ * @return true başarılı, false başarısız
+ */
+bool sensor_disable_turbo(void);
+
+/**
+ * @brief Turbo boost komutunu gönderir
+ * @param boost_pressure_kpa Hedef boost basıncı
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_turbo_boost_command(uint16_t boost_pressure_kpa);
+
+/**
+ * @brief Turbo sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_turbo_sensor_status(void);
+
+/**
+ * @brief Turbo boost basıncını ölçer
+ * @return Mevcut boost basıncı kPa cinsinden
+ */
+uint16_t sensor_measure_boost_pressure(void);
+
+/* ============================================================================
+   TUTUŞTURMAİGNİTION) KONTROL FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tutuşturma zamanlaması komutunu gönderir
+ * @param advance_degrees Zamanlaması derece cinsinden
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_ignition_timing_command(int8_t advance_degrees);
+
+/**
+ * @brief Ignition coil gücü komutunu gönderir
+ * @param coil_power Coil gücü yüzdesi (50-100)
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_ignition_coil_command(uint8_t coil_power);
+
+/**
+ * @brief Spark plug durumunu kontrol eder
+ * @return true sağlıklı, false değiştirilmesi gerekli
+ */
+bool sensor_check_spark_plug_status(void);
+
+/**
+ * @brief Tutuşturma sistemi durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_ignition_system_status(void);
+
+/**
+ * @brief Tutuşturma sistemini kalibre eder
+ * @param reference_timing Referans zamanlaması derece cinsinden
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_ignition_system(int8_t reference_timing);
+
+/* ============================================================================
+   SOĞUTMA SISTEMI FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Soğutma fanı komutunu gönderir
+ * @param fan_speed Fanı hızı yüzdesi (0-100)
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_cooling_fan_command(uint8_t fan_speed);
+
+/**
+ * @brief Soğutma sistemi durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_cooling_system_status(void);
+
+/**
+ * @brief Radyatör suyu sıcaklığını ölçer
+ * @return Radyatör suyu sıcaklığı Celsius cinsinden
+ */
+int16_t sensor_measure_coolant_temperature(void);
+
+/* ============================================================================
+   HAVA ALıMı VE THROTTLE FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Hava alımı komutunu gönderir
+ * @param air_intake_percentage Hava alımı yüzdesi (10-100)
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_air_intake_command(uint8_t air_intake_percentage);
+
+/**
+ * @brief Throttle konumu komutunu gönderir
+ * @param throttle_position Throttle konumu yüzdesi (0-100)
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_throttle_command(uint8_t throttle_position);
+
+/**
+ * @brief Hava akış hızını ölçer
+ * @return Hava akış hızı g/s cinsinden
+ */
+uint16_t sensor_measure_air_flow_rate(void);
+
+/* ============================================================================
+   TOPLU İŞLEMLER FONKSİYONLARI (2 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tüm sensörlerden okuma yapar
+ * @param readings Sensör değerlerini içerecek yapı
+ * @return true başarılı, false başarısız
+ */
+bool sensor_read_all_sensors(SensorReadings_t *readings);
+
+/**
+ * @brief Tüm sensörlerin durumunu kontrol eder
+ * @return true tümü sağlıklı, false hata var
+ */
+bool sensor_check_all_sensor_status(void);
+
+/* ============================================================================
+   İLERİ SEVİYE FONKSİYONLAR (POINTER & TYPEDEF)
+   ============================================================================ */
+
+/**
+ * @brief Sensör verisi noktasını işleyen fonksiyon
+ * @param data_point Sensör veri noktasına işaretçi
+ * @return İşlem sonucu (SensorResult_t)
+ */
+SensorResult_t sensor_process_data_point(const SensorDataPoint_t *data_point);
+
+/**
+ * @brief Batch sensör verilerini okuyan fonksiyon
+ * @param batch Batch veri yapısına işaretçi (çıktı)
+ * @return Başarılı true, başarısız false
+ */
+bool sensor_read_batch_data(SensorBatch_t *batch);
+
+/**
+ * @brief Batch sensör verilerini yazan fonksiyon
+ * @param batch Batch veri yapısına işaretçi (giriş)
+ * @return İşlem sonucu (SensorResult_t)
+ */
+SensorResult_t sensor_write_batch_data(const SensorBatch_t *batch);
+
+/**
+ * @brief Sensör kalibrasyonu yapısı döndüren fonksiyon
+ * @param sensor_id Sensör ID'si
+ * @param calibration_data Kalibrasyon verisi yapısına işaretçi (çıktı)
+ * @return Başarılı true, başarısız false
+ */
+bool sensor_get_calibration_data(uint16_t sensor_id, void *calibration_data);
+
+/**
+ * @brief Sensör veri noktası dizisini işleyen fonksiyon
+ * @param data_points Veri noktaları dizisi
+ * @param count Dizi eleman sayısı
+ * @return İşlenen nokta sayısı
+ */
+uint8_t sensor_process_data_point_array(const SensorDataPoint_t *data_points, uint8_t count);
+
+/**
+ * @brief Sensör hata kodunu yapıya kopyalayan fonksiyon
+ * @param out_error Hata bilgisi yapısına işaretçi
+ * @return Kopyalanan bayt sayısı
+ */
+uint16_t sensor_get_error_structure(void *out_error);
+
+/**
+ * @brief Birden fazla sensörü sıfırlayan fonksiyon
+ * @param sensor_ids Sensör ID'leri dizisi
+ * @param count Dizi eleman sayısı
+ * @return Sıfırlanan sensör sayısı
+ */
+uint8_t sensor_reset_multiple_sensors(const uint16_t *sensor_ids, uint8_t count);
+
+/**
+ * @brief Sensör durumunu pointer aracılığıyla döndüren fonksiyon
+ * @param out_status Durum yapısına işaretçi
+ * @return İşlem sonucu (SensorResult_t)
+ */
+SensorResult_t sensor_get_status_structure(SensorStatus_t *out_status);
+
+/**
+ * @brief Ham sensör verisini işleyen geri çağırabilir fonksiyon
+ * @param raw_data Ham veri işaretçisi
+ * @param processor_context İşleyici bağlamı
+ * @return İşlem başarılı true, başarısız false
+ */
+typedef bool (*SensorDataProcessor_t)(const int32_t *raw_data, void *processor_context);
+
+/**
+ * @brief Özel sensör işleyicisi çalıştıran fonksiyon
+ * @param processor Veri işleyici callback'i
+ * @param context Bağlam
+ * @return İşlem sonucu
+ */
+bool sensor_run_custom_processor(SensorDataProcessor_t processor, void *context);
+
+/**
+ * @brief Sensör konfigürasyonunu döndüren fonksiyon
+ * @param out_config Konfigürasyon yapısına işaretçi
+ * @return Kopyalanan yapı boyutu
+ */
+uint16_t sensor_get_configuration_structure(void *out_config);
+
+#endif /* SENSOR_INTERFACE_H */
+
+/**
+ * @file vehicle_diagnostics.h
+ * @brief Araç Tanı Sistemi Modülü - Motor Kontrol Sisteminin Bağımlılığı
+ * @details Hata tanı ve sistem sağlık kontrolü fonksiyonları
+ * @version 1.0
+ */
+
+#ifndef VEHICLE_DIAGNOSTICS_H
+#define VEHICLE_DIAGNOSTICS_H
+
+#include <stdint.h>
+#include <stdbool.h>
+
+/* ============================================================================
+   TANISALAMA TİPLERİ VE YAPILARI
+   ============================================================================ */
+
+typedef enum {
+    DIAG_SEVERITY_INFO = 0,
+    DIAG_SEVERITY_WARNING = 1,
+    DIAG_SEVERITY_ERROR = 2,
+    DIAG_SEVERITY_CRITICAL = 3
+} DiagnosticSeverity_t;
+
+typedef struct {
+    uint16_t code;
+    DiagnosticSeverity_t severity;
+    char description[128];
+    uint32_t occurrence_count;
+    uint32_t last_occurrence_time;
+} DiagnosticCode_t;
+
+typedef struct {
+    uint8_t total_codes;
+    uint8_t active_codes;
+    uint8_t critical_codes;
+    bool system_healthy;
+} DiagnosticSummary_t;
+
+/* ============================================================================
+   BAŞLANGIC VE KAPANMA FONKSİYONLARI (2 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tanı sistemini başlatır
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_initialize(void);
+
+/**
+ * @brief Tanı sistemini kapatır
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_shutdown(void);
+
+/* ============================================================================
+   HATA RAPORLAMA FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Hata kodunu raporlar
+ * @param error_code Hata kodu
+ * @param error_message Hata mesajı
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_report_error(uint16_t error_code, const char *error_message);
+
+/**
+ * @brief Hata kodunu temizler
+ * @param error_code Temizlenecek hata kodu
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_clear_error_code(uint16_t error_code);
+
+/**
+ * @brief Tüm hata kodlarını temizler
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_clear_all_error_codes(void);
+
+/**
+ * @brief Aktif hata kodlarını alır
+ * @param codes Hata kodlarını içerecek dizi
+ * @param max_codes Maksimum kod sayısı
+ * @return Bulunan hata kodu sayısı
+ */
+uint8_t diagnostic_get_active_error_codes(uint16_t *codes, uint8_t max_codes);
+
+/**
+ * @brief Son hatayı alır
+ * @return Son hata kodu
+ */
+uint16_t diagnostic_get_last_error_code(void);
+
+/* ============================================================================
+   SISTEM SAĞLIĞI KONTROL FONKSİYONLARI (6 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Genel sistem sağlığını kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool diagnostic_check_system_health(void);
+
+/**
+ * @brief Motor durumunu kontrol eder
+ * @return true normal, false sorun var
+ */
+bool diagnostic_check_engine_health(void);
+
+/**
+ * @brief Yakıt sistemi sağlığını kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool diagnostic_check_fuel_system_health(void);
+
+/**
+ * @brief Tutuşturma sistemi sağlığını kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool diagnostic_check_ignition_system_health(void);
+
+/**
+ * @brief Emişyon sistemi sağlığını kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool diagnostic_check_emission_system_health(void);
+
+/**
+ * @brief Türbo sistemi sağlığını kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool diagnostic_check_turbo_system_health(void);
+
+/* ============================================================================
+   PERFORMANS ANALIZ FONKSİYONLARI (6 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Motor performansını analiz eder
+ * @return Performans skoru (0-100)
+ */
+uint8_t diagnostic_analyze_engine_performance(void);
+
+/**
+ * @brief Yakıt verimliliğini hesaplar
+ * @return Yakıt verimliliği değeri
+ */
+float diagnostic_calculate_fuel_efficiency(void);
+
+/**
+ * @brief Emisyon seviyesini ölçer
+ * @return Emisyon skoru (0-100, düşük daha iyi)
+ */
+uint8_t diagnostic_measure_emission_level(void);
+
+/**
+ * @brief Motor sıcaklığı stabilitesini kontrol eder
+ * @return true stabil, false değişken
+ */
+bool diagnostic_check_temperature_stability(void);
+
+/**
+ * @brief RPM stabilitesini kontrol eder
+ * @return true stabil, false değişken
+ */
+bool diagnostic_check_rpm_stability(void);
+
+/**
+ * @brief Sensör kalibrasyonu doğrulaması
+ * @return true doğru, false yeniden kalibrasyonu gerekli
+ */
+bool diagnostic_verify_sensor_calibration(void);
+
+/* ============================================================================
+   TARAMA VE TETİKLEME FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tam sistem taraması yapan fonksiyon
+ * @return Bulunan sorun sayısı
+ */
+uint8_t diagnostic_perform_full_scan(void);
+
+/**
+ * @brief Sensör taraması yapan fonksiyon
+ * @return Sorunlu sensör sayısı
+ */
+uint8_t diagnostic_scan_all_sensors(void);
+
+/**
+ * @brief Motorun OBD (On-Board Diagnostics) verilerini alır
+ * @param obd_data OBD verilerini içerecek dizi (bayt cinsinden)
+ * @param max_size Maksimum veri boyutu
+ * @return Alınan bayt sayısı
+ */
+uint16_t diagnostic_read_obd_data(uint8_t *obd_data, uint16_t max_size);
+
+/**
+ * @brief Acil durum olayını kaydeder
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_log_emergency_event(void);
+
+/* ============================================================================
+   İSTATİSTİK VE RAPORLAMA FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tanı özetini alır
+ * @param summary Tanı özet yapısı
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_get_summary(DiagnosticSummary_t *summary);
+
+/**
+ * @brief Toplam çalışma saatini döndürür
+ * @return Toplam çalışma saati
+ */
+uint32_t diagnostic_get_total_runtime_hours(void);
+
+/**
+ * @brief Toplam hata sayısını döndürür
+ * @return Toplam hata sayısı
+ */
+uint32_t diagnostic_get_total_error_count(void);
+
+/**
+ * @brief Önerilen bakım dönemini hesaplar
+ * @return Günler cinsinden bakım dönemi
+ */
+uint16_t diagnostic_calculate_maintenance_interval(void);
+
+/**
+ * @brief Tanı raporunu dosyaya kaydeder
+ * @param filename Dosya adı
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_save_report_to_file(const char *filename);
+
+/* ============================================================================
+   UYARI VE KONTROL FONKSİYONLARI (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Kritik uyarıyı tetikler
+ * @param warning_code Uyarı kodu
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_trigger_critical_warning(uint16_t warning_code);
+
+/**
+ * @brief Uyarıyı devre dışı bırakır
+ * @param warning_code Uyarı kodu
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_dismiss_warning(uint16_t warning_code);
+
+/**
+ * @brief Aktif uyarıları alır
+ * @param warnings Uyarı kodlarını içerecek dizi
+ * @param max_warnings Maksimum uyarı sayısı
+ * @return Aktif uyarı sayısı
+ */
+uint8_t diagnostic_get_active_warnings(uint16_t *warnings, uint8_t max_warnings);
+
+/**
+ * @brief Son uyarıyı alır
+ * @return Son uyarı kodu
+ */
+uint16_t diagnostic_get_last_warning(void);
+
+/**
+ * @brief Uyarı seviyesini ayarlar (0-3)
+ * @param level Uyarı seviyesi
+ * @return true başarılı, false başarısız
+ */
+bool diagnostic_set_warning_level(uint8_t level);
+
+/* ============================================================================
+   KÜTÜPHANE VERSİYONU VE KONTROL FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Tanı kütüphanesi versiyon bilgisini döndürür
+ * @return Versiyon numarası
+ */
+uint32_t diagnostic_get_library_version(void);
+
+/**
+ * @brief Self-test yapan fonksiyon
+ * @return true geçti, false başarısız
+ */
+bool diagnostic_perform_self_test(void);
+
+/**
+ * @brief Tanı sisteminin durumunu döndürür
+ * @return true aktif, false inaktif
+ */
+bool diagnostic_is_system_active(void);
+
+/* ============================================================================
+   İLERİ SEVİYE FONKSİYONLAR (POINTER & CALLBACK)
+   ============================================================================ */
+
+typedef enum {
+    DIAG_RESULT_OK = 0,
+    DIAG_RESULT_ERROR = -1,
+    DIAG_RESULT_NO_DATA = -2
+} DiagnosticResult_t;
+
+typedef struct {
+    uint16_t error_code;
+    uint32_t occurrence_count;
+    uint32_t last_timestamp;
+    DiagnosticSeverity_t severity;
+} ErrorHistory_t;
+
+typedef struct {
+    uint16_t total_errors;
+    uint16_t critical_errors;
+    float average_error_severity;
+    uint32_t timestamp;
+} DiagnosticSnapshot_t;
+
+typedef bool (*DiagnosticFilterCallback_t)(const ErrorHistory_t *error, void *context);
+typedef void (*DiagnosticReportCallback_t)(const DiagnosticSnapshot_t *snapshot);
+
+/**
+ * @brief Hata tarihçesi yapısını döndüren fonksiyon
+ * @param error_code Hata kodu
+ * @param out_history Hata tarihçesi yapısına işaretçi
+ * @return İşlem sonucu (DiagnosticResult_t)
+ */
+DiagnosticResult_t diagnostic_get_error_history(uint16_t error_code, 
+                                                 ErrorHistory_t *out_history);
+
+/**
+ * @brief Hata tarihçe dizisini işleyen fonksiyon
+ * @param histories Hata tarihçeleri dizisi
+ * @param count Dizi eleman sayısı
+ * @param filter Filtreleme callback'i (NULL olabilir)
+ * @param context Callback bağlamı
+ * @return İşlenen tarihçe sayısı
+ */
+uint8_t diagnostic_process_error_history(const ErrorHistory_t *histories,
+                                         uint8_t count,
+                                         DiagnosticFilterCallback_t filter,
+                                         void *context);
+
+/**
+ * @brief Tanı anlık görüntüsü oluşturan fonksiyon
+ * @param out_snapshot Anlık görüntü yapısına işaretçi
+ * @return Başarılı true, başarısız false
+ */
+bool diagnostic_create_snapshot(DiagnosticSnapshot_t *out_snapshot);
+
+/**
+ * @brief Rapor callback'ini tetikleyen fonksiyon
+ * @param callback Rapor callback'i
+ * @return Başarılı true, başarısız false
+ */
+bool diagnostic_trigger_report_callback(DiagnosticReportCallback_t callback);
+
+/**
+ * @brief Hata kodlarını filtreleyip diziye kopyalayan fonksiyon
+ * @param out_codes Çıktı hata kodu dizisi
+ * @param max_codes Maksimum kod sayısı
+ * @param filter Filtreleme callback'i
+ * @param context Bağlam
+ * @return Kopyalanan kod sayısı
+ */
+uint8_t diagnostic_filter_error_codes(uint16_t *out_codes,
+                                      uint8_t max_codes,
+                                      DiagnosticFilterCallback_t filter,
+                                      void *context);
+
+/**
+ * @brief Diagnostik veri yapısını kopyalayan fonksiyon
+ * @param dest Hedef yapı işaretçisi
+ * @param src Kaynak yapı işaretçisi
+ * @param size Kopyalanacak bayt sayısı
+ * @return Kopyalanan bayt sayısı
+ */
+uint16_t diagnostic_copy_data_structure(void *dest, const void *src, uint16_t size);
+
+/**
+ * @brief Hata özet pointerini döndüren fonksiyon
+ * @return DiagnosticSummary yapısına const işaretçi
+ */
+const DiagnosticSummary_t* diagnostic_get_summary_pointer(void);
+
+/**
+ * @brief Çoklu hata tanısı yapan fonksiyon
+ * @param error_codes Kontrol edilecek hata kodları dizisi
+ * @param count Dizi eleman sayısı
+ * @param out_results Tanı sonuçları dizisi (çıktı)
+ * @return İşlenen hata sayısı
+ */
+uint8_t diagnostic_diagnose_multiple_errors(const uint16_t *error_codes,
+                                            uint8_t count,
+                                            bool *out_results);
+
+/**
+ * @brief Sistem performans verileri döndüren fonksiyon
+ * @param out_performance Performans verisi yapısına işaretçi
+ * @return Başarılı true, başarısız false
+ */
+bool diagnostic_get_performance_data(struct PerformanceData *out_performance);
+
+/**
+ * @brief Hata günlüğünü dosyaya yazan fonksiyon
+ * @param filename Dosya adı
+ * @param error_log Hata günlüğü yapısına işaretçi
+ * @return Yazılan bayt sayısı
+ */
+uint32_t diagnostic_write_error_log_to_file(const char *filename, 
+                                            const ErrorHistory_t *error_log);
+
+#endif /* VEHICLE_DIAGNOSTICS_H */
+
+
+
+Ayrıca, engine_get_status fonksiyonuna odaklanacağız. Sadece bu fonksiyon için hazırlanmış detaylı tasarım belgesinin ilk kısmı aşağıdadır:
+
+Kapsamlı Detay Tasarım Belgesi: engine_get_status (Bölüm 1 ve Bölüm 2)
+
+# Dataset İndeksi ve Gezinti Kılavuzu
+
+## 📑 Tüm Dosyalar
+
+### 📋 Dokümantasyon Dosyaları
+
+#### Ana Dokümantasyon
+
+1. **README.md** (Ana Dokümantasyon)
+
+   - Projenin genel tanımı ve yapısı
+   - Modül mimarisi ve bağımlılıkları
+   - Hata kodları ve veri tipleri
+   - Başlaması için gereken tüm bilgi
+2. **QUICK_START.md** (Hızlı Başlangıç)
+
+   - Dataset yapısının özeti
+   - Modüllerin kısa açıklaması
+   - Örnek kullanım kodları
+   - 5 dakikada başlamak için
+3. **PROJECT_SUMMARY.md** (Proje Özeti)
+
+   - Kapsamlı proje tanımı
+   - İstatistikler ve metrikler
+   - 7 adımlı framework detayları
+   - Kod kalitesi metrikleri
+4. **DIALOGUE_BASED_TESTING_FRAMEWORK.md** (Test Framework)
+
+   - 7 adımlı diyalog akışı
+   - Her adım için LLM promptları
+   - Beklenen LLM yanıtları
+   - Örnek test kodları
+5. **INDEX.md** (Bu Dosya)
+
+   - Tüm dosyaları gezinti haritası
+
+### 🔧 Modül Dosyaları
+
+#### Engine Control Module (ANA MODÜL - 40 Fonksiyon)
+
+- **engine_control/engine_control.h** (400+ satır)
+
+  - 40 public fonksiyon tanımı
+  - Veri yapıları ve enum'lar
+  - Detaylı fonksiyon dökümentasyonu
+- **engine_control/engine_control.c** (600+ satır)
+
+  - 40 fonksiyonun implementasyonu
+  - Static durum yönetimi
+  - İçsel yardımcı fonksiyonlar
+- **engine_control/README.md** (150+ satır)
+
+  - Modülün detaylı açıklaması
+  - Fonksiyon kategorileri
+  - Hata kodları tanımı
+  - Kullanım örnekleri
+
+#### Sensor Interface Module (MODÜL 2 - 20+ Fonksiyon)
+
+- **sensor_interface/sensor_interface.h** (350+ satır)
+
+  - 20+ sensör fonksiyonu
+  - Sensör veri yapıları
+  - Kalibrasyon fonksiyonları
+- **sensor_interface/sensor_interface.c** (400+ satır)
+
+  - Sensör implementasyonları
+  - Static sensör durumu
+  - Mock-ready tasarım
+- **sensor_interface/README.md** (150+ satır)
+
+  - Sensör modülü detayları
+  - Sensör değer aralıkları
+  - Modül mimarisi
+
+#### Vehicle Diagnostics Module (MODÜL 3 - 20+ Fonksiyon)
+
+- **vehicle_diagnostics/vehicle_diagnostics.h** (350+ satır)
+
+  - 20+ tanı fonksiyonu
+  - Hata kodlama sistemi
+  - Uyarı yönetimi
+- **vehicle_diagnostics/vehicle_diagnostics.c** (500+ satır)
+
+  - Tanı implementasyonları
+  - Hata yönetimi mantığı
+  - Performans analizi
+- **vehicle_diagnostics/README.md** (150+ satır)
+
+  - Tanı sistemi detayları
+  - Uyarı seviyeleri
+  - Hata yönetimi
+
+## 🗺️ Dosya Yapısı
+
+```
+dataset/
+├── 📄 INDEX.md (Bu dosya - gezinti haritası)
+├── 📄 README.md (Ana dokümantasyon)
+├── 📄 QUICK_START.md (Hızlı başlangıç)
+├── 📄 PROJECT_SUMMARY.md (Proje özeti)
+├── 📄 DIALOGUE_BASED_TESTING_FRAMEWORK.md (Test framework)
+│
+├── 📁 engine_control/
+│   ├── engine_control.h (400+ satır, 40 fonksiyon)
+│   ├── engine_control.c (600+ satır, implementasyon)
+│   └── README.md (Modül dokümantasyonu)
+│
+├── 📁 sensor_interface/
+│   ├── sensor_interface.h (350+ satır, 20+ fonksiyon)
+│   ├── sensor_interface.c (400+ satır, implementasyon)
+│   └── README.md (Modül dokümantasyonu)
+│
+└── 📁 vehicle_diagnostics/
+    ├── vehicle_diagnostics.h (350+ satır, 20+ fonksiyon)
+    ├── vehicle_diagnostics.c (500+ satır, implementasyon)
+    └── README.md (Modül dokümantasyonu)
+```
+
+## 🎯 Amacına Göre Okuma Sırası
+
+### Senaryo 1: 5 Dakika İçinde Başlangıç
+
+1. **QUICK_START.md** ← Başla
+2. **README.md** ← Detay
+3. **engine_control/engine_control.h** ← API
+
+### Senaryo 2: Kapsamlı Öğrenme
+
+1. **README.md** ← Genel bakış
+2. **PROJECT_SUMMARY.md** ← Detaylar
+3. **engine_control/README.md** ← Modül 1
+4. **sensor_interface/README.md** ← Modül 2
+5. **vehicle_diagnostics/README.md** ← Modül 3
+6. **engine_control/engine_control.h** ← API Detayları
+
+### Senaryo 3: Test Geliştirme
+
+1. **DIALOGUE_BASED_TESTING_FRAMEWORK.md** ← Framework
+2. **engine_control/engine_control.h** ← Header
+3. **sensor_interface/sensor_interface.h** ← Header
+4. **vehicle_diagnostics/vehicle_diagnostics.h** ← Header
+5. ADIM 1-7 promptlarını LLM'e ver
+
+### Senaryo 4: Implementation Derinliği
+
+1. **engine_control/engine_control.c** ← Kod inceleme
+2. **sensor_interface/sensor_interface.c** ← Kod inceleme
+3. **vehicle_diagnostics/vehicle_diagnostics.c** ← Kod inceleme
+4. **README.md** ← Hata kodları referansı
+
+## 📊 Dosya Istatistikleri
+
+| Dosya                               | Satır           | Tip      | Amaç                 |
+| ----------------------------------- | ---------------- | -------- | --------------------- |
+| README.md                           | 300+             | Markdoun | Genel proje tanımı  |
+| QUICK_START.md                      | 250+             | Markdown | Hızlı başlangıç  |
+| PROJECT_SUMMARY.md                  | 300+             | Markdown | Proje özeti          |
+| DIALOGUE_BASED_TESTING_FRAMEWORK.md | 500+             | Markdown | Test framework        |
+| engine_control.h                    | 400+             | C Header | Main API              |
+| engine_control.c                    | 600+             | C Code   | Main Implementation   |
+| engine_control/README.md            | 150+             | Markdown | Module docs           |
+| sensor_interface.h                  | 350+             | C Header | Sensor API            |
+| sensor_interface.c                  | 400+             | C Code   | Sensor Implementation |
+| sensor_interface/README.md          | 150+             | Markdown | Module docs           |
+| vehicle_diagnostics.h               | 350+             | C Header | Diag API              |
+| vehicle_diagnostics.c               | 500+             | C Code   | Diag Implementation   |
+| vehicle_diagnostics/README.md       | 150+             | Markdown | Module docs           |
+| **TOPLAM**                    | **4,100+** |          |                       |
+
+## 🔍 Hızlı Referans
+
+### Engine Control Fonksiyonları
+
+- **Başlatma**: `engine_initialize()`, `engine_shutdown()`
+- **RPM**: `engine_set_target_rpm()`, `engine_increase_rpm()`, `engine_decrease_rpm()`
+- **Yakıt**: `engine_set_fuel_injection_percentage()`, `engine_set_fuel_pressure()`
+- **Sıcaklık**: `engine_get_temperature()`, `engine_set_cooling_fan_speed()`
+- **Turbo**: `engine_set_turbo_enabled()`, `engine_set_turbo_boost_pressure()`
+- **Tutuşturma**: `engine_set_ignition_timing()`, `engine_set_ignition_coil_power()`
+
+### Sensor Interface Fonksiyonları
+
+- **RPM**: `sensor_read_rpm_sensor()`, `sensor_write_rpm_command()`
+- **Sıcaklık**: `sensor_read_temperature_sensor()`, `sensor_calibrate_temperature_sensor()`
+- **Yakıt**: `sensor_read_fuel_pressure_sensor()`, `sensor_write_fuel_injection_command()`
+- **Oksijen**: `sensor_read_oxygen_sensor()`, `sensor_calibrate_oxygen_sensor()`
+- **Turbo**: `sensor_enable_turbo()`, `sensor_write_turbo_boost_command()`
+
+### Diagnostics Fonksiyonları
+
+- **Hata**: `diagnostic_report_error()`, `diagnostic_clear_error_code()`
+- **Sağlık**: `diagnostic_check_system_health()`, `diagnostic_check_engine_health()`
+- **Analiz**: `diagnostic_analyze_engine_performance()`, `diagnostic_calculate_fuel_efficiency()`
+- **Uyarı**: `diagnostic_trigger_critical_warning()`, `diagnostic_dismiss_warning()`
+
+## 🔗 Bağımlılıklar
+
+```
+engine_control
+    ├── #include "sensor_interface.h"
+    │   └── 12+ direktif çağrısı
+    │
+    └── #include "vehicle_diagnostics.h"
+        └── 8+ direktif çağrısı
+```
+
+## 📌 Önemli Notlar
+
+1. **Static Durum Yönetimi**: Her modül static değişkenlerde durum tutmaktadır
+2. **Mock Hazırlığı**: Tüm fonksiyonlar CMock ile mock'lanmak için tasarlandı
+3. **Parametre Validasyonu**: Tüm fonksiyonlar girdilerini valide eder
+4. **Hata Kodlama**: 0xXYZZ formatında kapsamlı hata kodları
+5. **Dokümantasyon**: Her fonksiyon Doxygen formatında dokümante edilmiş
+
+## ✅ Dataset Özellikleri
+
+- ✅ **80+ Fonksiyon**: Test etmeye hazır
+- ✅ **~2,600 Satır Kod**: Realističtir
+- ✅ **Kapsamlı Dokümantasyon**: 6 markdown dosyası
+- ✅ **7 Adımlı Test Framework**: LLM-uyumlu
+- ✅ **Mock-Ready**: CMock ile uyumlu
+- ✅ **Modüler Tasarım**: Bağımlılık yönetimi
+- ✅ **Gerçekçi**: Motor kontrol sistemlerine dayalı
+
+## 🚀 Başlamak için
+
+### Option 1: 5 Dakika
+
+```
+1. QUICK_START.md oku
+2. engine_control/engine_control.h incele
+3. Yapı anla
+```
+
+### Option 2: 30 Dakika
+
+```
+1. README.md oku
+2. 3 modülün README'sini oku
+3. Header dosyalarını incele
+```
+
+### Option 3: Test Geliştirme
+
+```
+1. DIALOGUE_BASED_TESTING_FRAMEWORK.md oku
+2. ADIM 1-7 promptlarını LLM'e ver
+3. Otomatik test kodları al
+```
+
+## 📞 Sık Sorulan Sorular
+
+**S: Hangi dosyayı ilk olarak okumalıyım?**C: Amacınıza bağlı:
+
+- Hızlı başlama: QUICK_START.md
+- Kapsamlı anlama: README.md
+- Test yazma: DIALOGUE_BASED_TESTING_FRAMEWORK.md
+
+**S: Kaç test senaryosu yazılabilir?**
+C: 55+ test senaryosu oluşturulabilir (başarı, hata, sınır değer, mock)
+
+**S: Modüller arası bağımlılıklar nelerdir?**
+C: `engine_control` → `sensor_interface` + `vehicle_diagnostics`
+
+**S: Hangi framework'ü kullanmalıyım?**
+C: Ceedling/Unity + CMock (önerilir)
+
+**S: Static durum değişkenleri test edilebilir mi?**
+C: Evet, fonksiyonların dönüş değerleri ve yan etkileri üzerinden
+
+## 📚 Ek Kaynaklar
+
+- **Ceedling**: http://www.throwtheswitch.org/ceedling
+- **Unity**: http://www.throwtheswitch.org/unity
+- **CMock**: http://www.throwtheswitch.org/cmock
+- **C Programlama**: Standart C referansı
+
+---
+
+**Dataset Version**: 1.0
+**Last Updated**: 2025
+**Status**: ✅ COMPLETE
+**Files**: 17
+**Total Lines**: 4,100+
+**Functions**: 80+
+**Test Potential**: 55+    end
+
+Bu genel bağlamı ve engine_get_status fonksiyonunun teknik arayüzünü anladıysan, henüz test yazma veya detaylı davranış analizi yapma, sadece bu yapıyı öğren ve içselleştir. Bir sonraki adıma hazır olduğunu teyit et.
+
+[LLM Cevabı]:
+t error_code);
+typedef void (*EnginePerformanceCallback_t)(PerformanceMetrics_t *metrics);
+
+/* EngineState tipleri */
+typedef enum
+{
+    ENGINE_STATE_OFF = 0,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum
+{
+    ENGINE_ERROR_NONE = 0,
+    ENGINE_ERROR_STARTING,
+    ENGINE_ERROR_RUNNING,
+    ENGINE_ERROR_STOPPING,
+    ENGINE_ERROR_STOPPED,
+    ENGINE_ERROR_RPM_OUT_OF_RANGE,
+    ENGINE_ERROR_ENGINE_TEMP_OUT_OF_RANGE,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE,
+    ENGINE_ERROR_FUEL_LEVEL_LOW,
+    ENGINE_ERROR_FUEL_LEVEL_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_HIGH_FUEL_LEVEL,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_HIGH_FUEL_LEVEL_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH,
+    ENGINE_ERROR_FUEL_LEVEL_OUT_OF_RANGE_LOW_HIGH_TEMP_RPM_ENGINE_TEMP_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_LOW_HIGH_FUEL_LEVEL_HIGH_FUEL_LEVEL_HIGH
+
+
+==================================================
+3. Adım 3: Fonksiyonel Davranış
+==================================================
+
+[Prompt]:
+Mükemmel. Şimdi, engine_get_status fonksiyonunun detaylı fonksiyonel davranış ve mantık bölümü aşağıdadır. Bu belgedeki bilgiyi, daha önce edindiğin genel bağlam ve engine_get_status fonksiyonunun teknik arayüz bilgisiyle birleştirerek içselleştir. Fonksiyon içindeki static veya internal durum değişkenlerine doğrudan erişilemeyeceği için, bu değişkenlerin etkileri yalnızca gözlemlenebilir sonuçlar (örneğin dönüş değerleri veya çağrı sıraları) üzerinden test edilmelidir.
+
+Kapsamlı Detay Tasarım Belgesi: engine_get_status (Bölüm 3: Fonksiyonel Davranış ve Mantık)
+
+# Vehicle Diagnostics Module (Modül 3)
+
+## Genel Bilgi
+
+Bu modül, araç tanı ve sistem sağlığı kontrol fonksiyonlarını sağlar. Hata kodlama, uyarı yönetimi, performans analizi ve raporlama işlemlerini yönetir.
+
+## Özellikler
+
+- **20+ Public Fonksiyon** ile tanı sistemi yönetimi
+- **Hata Raporlama**: Hata kodlama, temizleme, aktif hata listesi
+- **Sistem Sağlığı**: Genel, motor, yakıt, tutuşturma, emisyon, turbo
+- **Performans Analizi**: Motor performans skoru, yakıt verimliliği, emisyon seviyesi
+- **Tarama Fonksiyonları**: Tam sistem taraması, sensör taraması, OBD verileri
+- **İstatistik & Raporlama**: Toplam çalışma saati, hata sayısı, bakım aralığı
+- **Uyarı Yönetimi**: Kritik uyarılar, uyarı seviyeleri, aktif uyarılar
+- **Self-test**: Tanı sisteminin kendi kontrol fonksiyonları
+
+## Bağımlılıklar
+
+Bağımsız modül olarak tasarlanmış. Engine Control modülü tarafından kullanılır.
+
+## Modül Mimarisi
+
+### Veri Yapıları
+
+```c
+DiagnosticSeverity_t    - Hata şiddeti seviyeleri
+DiagnosticCode_t        - Hata kodu bilgileri
+DiagnosticSummary_t     - Tanı özet bilgileri
+```
+
+### Fonksiyon Kategorileri
+
+1. **Başlangıç/Kapanma (2)**: `diagnostic_initialize`, `diagnostic_shutdown`
+2. **Hata Raporlama (5)**: `diagnostic_report_error`, `diagnostic_clear_error_code`, `diagnostic_clear_all_error_codes`, `diagnostic_get_active_error_codes`, `diagnostic_get_last_error_code`
+3. **Sistem Sağlığı Kontrol (6)**: `diagnostic_check_system_health`, `diagnostic_check_engine_health`, `diagnostic_check_fuel_system_health`, `diagnostic_check_ignition_system_health`, `diagnostic_check_emission_system_health`, `diagnostic_check_turbo_system_health`
+4. **Performans Analiz (6)**: `diagnostic_analyze_engine_performance`, `diagnostic_calculate_fuel_efficiency`, `diagnostic_measure_emission_level`, `diagnostic_check_temperature_stability`, `diagnostic_check_rpm_stability`, `diagnostic_verify_sensor_calibration`
+5. **Tarama ve Tetikleme (4)**: `diagnostic_perform_full_scan`, `diagnostic_scan_all_sensors`, `diagnostic_read_obd_data`, `diagnostic_log_emergency_event`
+6. **İstatistik ve Raporlama (5)**: `diagnostic_get_summary`, `diagnostic_get_total_runtime_hours`, `diagnostic_get_total_error_count`, `diagnostic_calculate_maintenance_interval`, `diagnostic_save_report_to_file`
+7. **Uyarı ve Kontrol (5)**: `diagnostic_trigger_critical_warning`, `diagnostic_dismiss_warning`, `diagnostic_get_active_warnings`, `diagnostic_get_last_warning`, `diagnostic_set_warning_level`
+8. **Kütüphane Versiyonu ve Kontrol (3)**: `diagnostic_get_library_version`, `diagnostic_perform_self_test`, `diagnostic_is_system_active`
+
+## Hata Kodu Kategorileri
+
+Hata kodları, şunlar olarak kategorize edilir:
+
+- `0x1XXX` - Motor hataları
+- `0x4XXX` - Yakıt sistemi hataları
+- `0x7XXX` - Tutuşturma sistemi hataları
+- `0x6XXX` - Turbo sistemi hataları
+- `0x9XXX` - Kritik hata kodları
+
+## Uyarı Seviyeleri
+
+| Seviye | Açıklama          |
+| ------ | ------------------- |
+| 0      | BILGI (Info)        |
+| 1      | UYARI (Warning)     |
+| 2      | HATA (Error)        |
+| 3      | KRİTİK (Critical) |
+
+## Performans Puanları
+
+| Metrik             | Aralık | Açıklama        |
+| ------------------ | ------- | ----------------- |
+| Engine Performance | 0-100   | Yüksek daha iyi  |
+| Fuel Efficiency    | L/100km | Düşük daha iyi |
+| Emission Level     | 0-100   | Düşük daha iyi |
+
+## Örnek Kullanım
+
+```c
+#include "vehicle_diagnostics.h"
+
+// Tanı sistemini başlat
+if (diagnostic_initialize()) {
+    // Hata raporla
+    diagnostic_report_error(0x1001, "Engine overheat detected");
+  
+    // Sistem sağlığını kontrol et
+    if (!diagnostic_check_system_health()) {
+        // Sorun var
+    }
+  
+    // Aktif hata kodlarını al
+    uint16_t errors[20];
+    uint8_t error_count = diagnostic_get_active_error_codes(errors, 20);
+  
+    // Performans analizi
+    uint8_t performance = diagnostic_analyze_engine_performance();
+    float fuel_eff = diagnostic_calculate_fuel_efficiency();
+  
+    // Tanı özetini al
+    DiagnosticSummary_t summary;
+    if (diagnostic_get_summary(&summary)) {
+        // summary.active_codes, summary.system_healthy vb.
+    }
+  
+    diagnostic_shutdown();
+}
+```
+
+## Hata Yönetimi
+
+Tanı sistemi, şunları takip eder:
+
+- **Aktif Hata Sayısı**: Maksimum 20 aktivatif hata
+- **Toplam Hata Sayısı**: Sistem başlatıldığından beri toplam hata sayısı
+- **Son Hata Kodu**: En son raporlanan hata
+- **Toplam Çalışma Saati**: Runtime verisi
+
+## Durum Yönetimi
+
+Modül, şunları içsel olarak yönetir:
+
+- Aktif hata kod listesi
+- Toplam hata ve çalışma istatistikleri
+- Aktif uyarı listesi
+- Uyarı seviyesi ayarları
+- Genel sistem sağlık durumu
+
+## Notlar
+
+- Tanı sistemi başlatılmadıkça fonksiyonlar çalışmaz
+- Tüm sağlık kontrol fonksiyonları hata kodlarını kontrol ederek karar verir
+- Performans puanları hata sayısına göre otomatik olarak hesaplanır
+- OBD (On-Board Diagnostics) verileri standart format kullanır  # Sensor Interface Module (Modül 2)
+
+## Genel Bilgi
+
+Bu modül, tüm sensörlerin **okuma ve yazma işlemlerinin arayüzü**ni sağlar. Motor kontrol sistemi bu modül üzerinden motor sensörlerine komut gönderir ve sensörlerden veri okur.
+
+## Özellikler
+
+- **20+ Public Fonksiyon** ile sensör yönetimi
+- **RPM Sensörü**: Okuma, komut yazma, kalibrasyon
+- **Sıcaklık Sensörü**: Okuma, kalibrasyon, limit ayarı
+- **Yakıt Basıncı Sensörü**: Okuma, komut yazma, kalibrasyon
+- **Yakıt Enjeksiyonu**: Enjeksiyonu yüzdesi, akış hızı ölçümü
+- **Oksijen Sensörü**: Oksijen seviyesi ölçümü, kalibrasyon
+- **Turbo Sistemi**: Turbo etkinleştirme, boost basıncı kontrolü
+- **Tutuşturma (Ignition)**: Zamanlaması, coil gücü, spark plug
+- **Soğutma Sistemi**: Fanı kontrol, sistem durumu
+- **Hava Alımı & Throttle**: Hava alımı ve throttle konumu kontrolü
+- **Toplu İşlemler**: Tüm sensörlerden tek seferde okuma
+
+## Bağımlılıklar
+
+Bağımsız modül olarak tasarlanmış. Engine Control modülü tarafından kullanılır.
+
+## Modül Mimarisi
+
+### Veri Yapıları
+
+```c
+SensorStatus_t      - Sensör durumu bilgileri
+SensorReadings_t    - Tüm sensörlerden okunan değerler
+```
+
+### Fonksiyon Kategorileri
+
+1. **Başlangıç/Kapanma (3)**: `sensor_initialize`, `sensor_shutdown`, `sensor_calibrate_all`
+2. **RPM Sensörü (4)**: `sensor_read_rpm_sensor`, `sensor_write_rpm_command`, `sensor_check_rpm_sensor_status`, `sensor_calibrate_rpm_sensor`
+3. **Sıcaklık Sensörü (4)**: `sensor_read_temperature_sensor`, `sensor_check_temperature_sensor_status`, `sensor_calibrate_temperature_sensor`, `sensor_set_temperature_limits`
+4. **Yakıt Basıncı Sensörü (4)**: `sensor_read_fuel_pressure_sensor`, `sensor_write_fuel_pressure_command`, `sensor_check_fuel_pressure_status`, `sensor_calibrate_fuel_pressure_sensor`
+5. **Yakıt Enjeksiyonu (3)**: `sensor_write_fuel_injection_command`, `sensor_check_fuel_sensor_status`, `sensor_measure_fuel_flow_rate`
+6. **Oksijen Sensörü (3)**: `sensor_read_oxygen_sensor`, `sensor_check_oxygen_sensor_status`, `sensor_calibrate_oxygen_sensor`
+7. **Turbo Kontrol (5)**: `sensor_enable_turbo`, `sensor_disable_turbo`, `sensor_write_turbo_boost_command`, `sensor_check_turbo_sensor_status`, `sensor_measure_boost_pressure`
+8. **Tutuşturma (5)**: `sensor_write_ignition_timing_command`, `sensor_write_ignition_coil_command`, `sensor_check_spark_plug_status`, `sensor_check_ignition_system_status`, `sensor_calibrate_ignition_system`
+9. **Soğutma Sistemi (3)**: `sensor_write_cooling_fan_command`, `sensor_check_cooling_system_status`, `sensor_measure_coolant_temperature`
+10. **Hava Alımı & Throttle (3)**: `sensor_write_air_intake_command`, `sensor_write_throttle_command`, `sensor_measure_air_flow_rate`
+11. **Toplu İşlemler (2)**: `sensor_read_all_sensors`, `sensor_check_all_sensor_status`
+
+## Sensör Değer Aralıkları
+
+| Sensör          | Min | Max  | Birim  |
+| ---------------- | --- | ---- | ------ |
+| RPM              | 0   | 8000 | RPM    |
+| Sıcaklık       | -40 | 150  | °C    |
+| Yakıt Basıncı | 200 | 600  | kPa    |
+| Oksijen          | 0   | 100  | %      |
+| Turbo Boost      | 0   | 300  | kPa    |
+| Tutuşturma      | -15 | +15  | derece |
+| Fanı            | 0   | 100  | %      |
+| Hava Alımı     | 10  | 100  | %      |
+| Throttle         | 0   | 100  | %      |
+
+## Örnek Kullanım
+
+```c
+#include "sensor_interface.h"
+
+// Sensörleri başlat
+if (sensor_initialize()) {
+    // RPM sensöründen oku
+    uint16_t rpm = sensor_read_rpm_sensor();
+  
+    // Sıcaklık sensöründen oku
+    int16_t temp = sensor_read_temperature_sensor();
+  
+    // Yakıt basıncı komutunu gönder
+    sensor_write_fuel_pressure_command(350);
+  
+    // Tüm sensörlerden oku
+    SensorReadings_t readings;
+    if (sensor_read_all_sensors(&readings)) {
+        // readings.rpm_value, readings.temperature_value vb.
+    }
+  
+    sensor_shutdown();
+}
+```
+
+## Durum Yönetimi
+
+Modül, sensör değerlerini static değişkenlerde depolar ve bu değerleri:
+
+- Yazma komutları ile günceller
+- Okuma fonksiyonları ile sunar
+- Kalibrasyon işlemleri ile ayarlar
+
+Gerçek bir sistemde, bu değerler donanım sensörlerinden okunur.
+
+## Hata Yönetimi
+
+Hata durumları:
+
+- Sensör başlatılmamış: Fonksiyonlar `false` döner
+- Geçersiz parametre: Kalibrasyon değerleri kontrol edilir
+- Sınır dışı değer: Yazma fonksiyonları `false` döner
+
+## Notlar
+
+- Tüm sensör operasyonları `sensor_initialize()` çağrısından sonra çalışır
+- Kalibrasyon fonksiyonları, sensör değerlerini referans değerleri ile ayarlar
+- Toplu okuma işlemleri, tüm sensörlerin anlık değerlerini sunar  # Engine Control Module (Ana Modül)
+
+## Genel Bilgi
+
+Bu modül, otomotiv motor kontrol sisteminin **ana bileşenidir** ve motor RPM, yakıt enjeksiyonu, tutuşturma zamanlaması, turbo kontrol ve soğutma sistemi gibi tüm kritik fonksiyonları yönetir.
+
+## Özellikler
+
+- **40+ Public Fonksiyon** ile motor kontrol
+- **Başlangıç/Kapanma**: Motor başlatma ve güvenli kapanma
+- **RPM Kontrolü**: RPM limitlerini, hızlandırma/yavaşlatmayı ve stabiliteyi yönetir
+- **Yakıt Enjeksiyonu**: Yakıt basıncı, enjeksiyonu modu ve zamanlaması
+- **Sıcaklık Kontrolü**: Motor sıcaklığı, soğutma fanı, otomatik kontrol
+- **Turbo Sistemi**: Turbo etkinleştirme, boost basıncı kontrolü
+- **Tutuşturma (Ignition)**: Zamanlaması, coil gücü, spark plug kontrolü
+- **Durum Yönetimi**: Statik durum değişkenleri ile gerçek zamanlı motor parametreleri
+- **Hata Yönetimi**: Kapsamlı hata kodlama ve recovery mekanizması
+- **Teşhis Verileri**: Toplam çalışma saati, maksimum/minimum sıcaklık vb.
+
+## Bağımlılıklar
+
+- `sensor_interface.h` - Sensör okuma/yazma işlemleri
+- `vehicle_diagnostics.h` - Sistem sağlığı ve hata teşhisi
+
+## Modül Mimarisi
+
+### Veri Yapıları
+
+```c
+EngineState_t       - Motor durumu bilgileri
+EngineCommand_t     - Motor komutları
+EngineStatus_t      - Motor mevcut durumu
+ErrorLog_t          - Hata günlüğü
+DiagnosticData_t    - Tanı verileri
+```
+
+### Fonksiyon Kategorileri
+
+1. **Başlangıç/Kapanma (5)**: `engine_initialize`, `engine_shutdown`, `engine_reset_state`, `engine_emergency_stop`, `engine_set_mode`
+2. **RPM Kontrol (8)**: `engine_set_target_rpm`, `engine_get_current_rpm`, `engine_increase_rpm`, `engine_decrease_rpm`, `engine_set_rpm_limit`, `engine_set_rpm_acceleration_rate`, `engine_set_rpm_deceleration_rate`, `engine_check_rpm_stability`
+3. **Yakıt Enjeksiyonu (7)**: `engine_set_fuel_injection_mode`, `engine_set_fuel_injection_percentage`, `engine_set_fuel_pressure`, `engine_get_fuel_pressure`, `engine_set_fuel_injection_timing`, `engine_calculate_fuel_consumption`, `engine_check_fuel_system_health`
+4. **Sıcaklık Kontrol (6)**: `engine_get_temperature`, `engine_set_max_temperature_limit`, `engine_set_cooling_fan_speed`, `engine_auto_cooling_control`, `engine_calibrate_temperature_sensor`, `engine_check_temperature_warning`
+5. **Turbo Kontrol (4)**: `engine_set_turbo_enabled`, `engine_set_turbo_boost_pressure`, `engine_get_turbo_boost_pressure`, `engine_check_turbo_system_health`
+6. **Tutuşturma (Ignition) (5)**: `engine_set_ignition_mode`, `engine_set_ignition_timing`, `engine_set_ignition_coil_power`, `engine_check_spark_plug_health`, `engine_check_ignition_system_health`
+7. **Motor Durumu & Sensörler (5)**: `engine_get_status`, `engine_apply_command`, `engine_set_air_intake_percentage`, `engine_set_throttle_position`, `engine_get_oxygen_level`
+8. **Hata Yönetimi (4)**: `engine_get_last_error`, `engine_clear_error_code`, `engine_attempt_recovery`, `engine_get_diagnostic_data`
+9. **Diğer (3)**: `engine_run_for_seconds`, `engine_get_system_version`
+
+## Hata Kodları
+
+Motor kontrolü, `0xXYZZ` formatında hata kodları kullanır:
+
+- `0x1XXX` - Başlangıç/Kapanma hataları
+- `0x2XXX` - Mod ve durum hataları
+- `0x3XXX` - RPM kontrol hataları
+- `0x4XXX` - Yakıt enjeksiyonu hataları
+- `0x5XXX` - Sıcaklık kontrol hataları
+- `0x6XXX` - Turbo sistem hataları
+- `0x7XXX` - Tutuşturma sistemi hataları
+- `0x8XXX` - Motor durumu ve sensör hataları
+- `0x9XXX` - Kritik hata yönetimi hataları
+
+## Örnek Kullanım
+
+```c
+#include "engine_control.h"
+
+// Motor başlat
+if (engine_initialize(1000)) {
+    // Hedef RPM ayarla
+    engine_set_target_rpm(3000);
+  
+    // Yakıt enjeksiyonunu ayarla
+    engine_set_fuel_injection_percentage(80);
+  
+    // Motor durumunu al
+    EngineStatus_t status;
+    if (engine_get_status(&status)) {
+        // Mevcut RPM: status.current_rpm
+    }
+  
+    // Motor kapat
+    engine_shutdown();
+}
+```
+
+## Test Edilecek Fonksiyonlar
+
+Bu modülün **tüm 40+ fonksiyonu** birim testlerinin konusu olacaktır. Her fonksiyon için:
+
+- Geçerli girdiler ile başarı testleri
+- Geçersiz girdiler ile hata testleri
+- Sınır değer testleri
+- Bağımlılık fonksiyonlarının mock'lanması
+
+## Notlar
+
+- Motor durumu, static değişkenler ile içsel olarak yönetilir
+- Sensör sistemi başlatılmadıkça fonksiyonlar çalışmaz
+- Tüm komutlar sensör arayüzü üzerinden yazılır
+- Hata recovery mekanizması vardır (maksimum 3 deneme)   END
+
+Tasarım belgesinin bu kısmını anladıysan ve bir sonraki adıma geçmek için hazırsan teyit et.
+
+[LLM Cevabı]:
+)(EngineError_t error);
+typedef void (*EnginePerformanceCallback_t)(PerformanceMetrics_t *metrics);
+
+/* EngineState tipleri */
+typedef enum
+{
+    ENGINE_STATE_OFF,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum
+{
+    ENGINE_ERROR_NONE,
+    ENGINE_ERROR_STARTING,
+    ENGINE_ERROR_RUNNING,
+    ENGINE_ERROR_STOPPING,
+    ENGINE_ERROR_OTHER
+} EngineError_t;
+
+/* EngineConfig tipleri */
+typedef struct
+{
+    uint32_t max_rpm;
+    uint32_t min_rpm;
+    uint32_t max_throttle;
+    uint32_t min_throttle;
+    uint32_t max_fuel_rate;
+    uint32_t min_fuel_rate;
+    uint32_t max_fuel_level;
+    uint32_t min_fuel_level;
+    uint32_t max_fuel_consumption;
+    uint32_t min_fuel_consumption;
+    uint32_t max_fuel_temperature;
+    uint32_t min_fuel_temperature;
+    uint32_t max_coolant_temperature;
+    uint32_t min_coolant_temperature;
+    uint32_t max_oil_temperature;
+    uint32_t min_oil_temperature;
+    uint32_t max_water_temperature;
+    uint32_t min_water_temperature;
+    uint32_t max_air_temperature;
+    uint32_t min_air_temperature;
+    uint32_t max_engine_temperature;
+    uint32_t min_engine_temperature;
+    uint32_t max_engine_torque;
+    uint32_t min_engine_torque;
+    uint32_t max_engine_speed;
+    uint32_t min_engine_speed;
+    uint32_t max_engine_power;
+    uint32_t min_engine_power;
+    uint32_t max_engine_load;
+    uint32_t min_engine_load;
+    uint32_t max_engine_fuel_rate;
+    uint32_t min_engine_fuel_rate;
+    uint32_t max_engine_fuel_level;
+    uint32_t min_engine_fuel_level;
+    uint32_t max_engine_fuel_consumption;
+    uint32_t min_engine_fuel_consumption;
+    uint32_t max_engine_fuel_temperature;
+    uint32_t min_engine_fuel_temperature;
+    uint32_t max_engine_coolant_temperature;
+    uint32_t min_engine_coolant_temperature;
+    uint32_t max_engine_oil_temperature;
+    uint32_t min_engine_oil_temperature;
+    uint32_t max_engine_water_temperature;
+    uint32_t min_engine_water_temperature;
+    uint32_t max_engine_air_temperature;
+    uint32_t min_engine_air_temperature;
+    uint32_t max_engine_temperature;
+    uint32_t min_engine_temperature;
+    uint32_t max_engine_torque;
+    uint32_t min_engine_torque;
+    uint32_t max_engine_speed;
+    uint32_t min_engine_speed;
+    uint32_t max_engine_power;
+    uint32_t min_engine_power;
+    uint32_t max_engine_load;
+    uint32_t min_engine_load;
+    uint32_t max_engine_fuel_rate;
+    uint32_t min_engine_fuel_rate;
+    uint32_t max_engine_fuel_level;
+    uint32_t min_engine_fuel_level;
+    uint32_t max_engine_fuel_consumption;
+    uint32_t min_engine_fuel_consumption;
+    uint32_t max_engine_fuel_temperature;
+    uint32_t min_engine_fuel_temperature;
+    uint32_t max_engine_coolant_temperature;
+    uint32_t min_engine_coolant_temperature;
+    uint32_t max_engine_oil_temperature;
+    uint32_t min_engine_oil_temperature;
+    uint32_t max_engine_water_temperature;
+    uint32_t min_engine_water_temperature;
+    uint32_t max_engine_air_temperature;
+    uint32_t min_engine_air_temperature;
+    uint32_t max_engine_temperature;
+    uint32_t min_engine_temperature;
+    uint32_t max_engine_torque;
+    uint32_t min_engine_torque;
+    uint32_t max_engine_speed;
+    uint32_t min_engine_speed;
+    uint32_t max_engine_power;
+    uint32_t min_engine_power;
+    uint32_t max_
+
+
+==================================================
+4. Adım 4: Test Tasarım Kriterleri
+==================================================
+
+[Prompt]:
+Mükemmel. engine_get_status için tüm genel bağlam, arayüz ve detaylı fonksiyonel davranış bilgilerine sahipsin. Şimdi senden, bu bilgilere dayanarak, engine_get_status için aşağıdaki iki bölümü eksiksiz ve detaylı bir şekilde üretmeni istiyorum:
+
+Bölüm 3: Test Tasarım Kriterleri ve Kapsam Alanları
+
+3.1. Test Tasarım Teknikleri: Bu fonksiyonu test ederken [buraya Eşdeğerlik Bölümlemesi, Sınır Değer Analizi, Hata Tahmini vb. uygun teknikleri belirle] tekniklerini kullanmalısın.
+
+3.2. Geçerli Girdi Kategorileri (Eşdeğerlik Sınıfları): [engine_get_status için geçerli girdi senaryolarını maddeler halinde listele. Örn: param_a parametresinin 1 ile 100 arasında bir değer aldığı durumlar.]
+
+3.3. Geçersiz Girdi Kategorileri (Hata Durumları): [engine_get_status için geçersiz girdi senaryolarını veya hata durumlarını maddeler halinde listele. Örn: param_b parametresine NULL gönderilmesi.]
+
+3.4. Analiz Edilecek Sınır Değerleri: [engine_get_status fonksiyonunun parametreleri için kritik sınır değerlerini maddeler halinde listele. Örn: param_a değişkenine 0, 1, 100 ve 101 değerlerini ver.]
+
+Bölüm 4: Bağımlılıklar ve Mock Davranış Kuralları
+
+4.1. Bağımlı Fonksiyonlar: [engine_get_status fonksiyonunun çağırdığı tüm bağımlı fonksiyonları listele, mümkünse header dosyası/modül adını da belirt. Örn: example_func_1(int input_val) (example2.h)]
+
+4.2. Mock Davranış Mantığı:
+
+Bu bölümde, aşağıdaki 'Kesinlik Kuralı'na uymalısın: Her mock kuralı, genel bir tanım ('bir struct döndürür') yerine, spesifik ve somut değerler içermelidir. Her senaryo için girdi parametrelerinin tam değerlerini ve beklenen dönüş değerinin veya yan etkinin tam karşılığını belirtmelisin.
+
+- example_func_1 fonksiyonu için mock oluştururken:
+
+- Girdi olarak [belli bir değer, örn: 100] verildiğinde, [beklenen çıktı/davranışı, örn: xxxxx bilgilerini içeren bir example_struct döndürmelidir].
+
+- Girdi olarak [başka bir değer/durum, örn: 100 verilmediğinde] [başka bir beklenen çıktı/davranışı, örn: NULL döndürmelidir].
+
+- example_func_2 fonksiyonu için mock oluştururken:
+
+- [Bu bağımlı fonksiyon için mock davranış kurallarını detaylıca listele. Örn: engine_get_status fonksiyonuna geçersiz bir parametre (örn: NULL) gönderildiğinde bu fonksiyonun çağrıldığını doğrulamalısın.]
+
+- [Gerekiyorsa diğer bağımlı fonksiyonlar için de aynı formatı kullan.]
+
+Bu iki bölümü, yukarıdaki formatı takip ederek ve engine_get_status fonksiyonuna özel detaylarla doldurarak oluşturmanı bekliyorum.
+
+[LLM Cevabı]:
+)(EngineError_t error);
+
+/* EngineState tipleri */
+typedef enum
+{
+    ENGINE_STATE_OFF,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum
+{
+    ENGINE_ERROR_NONE,
+    ENGINE_ERROR_STARTING,
+    ENGINE_ERROR_RUNNING,
+    ENGINE_ERROR_STOPPING,
+    ENGINE_ERROR_FAULT
+} EngineError_t;
+
+/* EngineConfig tipleri */
+typedef struct
+{
+    uint32_t rpm_min;
+    uint32_t rpm_max;
+    uint32_t rpm_start;
+    uint32_t rpm_stop;
+    uint32_t rpm_fault;
+    uint32_t rpm_idle;
+    uint32_t rpm_idle_min;
+    uint32_t rpm_idle_max;
+    uint32_t rpm_idle_fault;
+    uint32_t rpm_idle_stop;
+    uint32_t rpm_idle_stop_min;
+    uint32_t rpm_idle_stop_max;
+    uint32_t rpm_idle_stop_fault;
+    uint32_t rpm_idle_stop_min_fault;
+    uint32_t rpm_idle_stop_max_fault;
+    uint32_t rpm_idle_stop_fault_min;
+    uint32_t rpm_idle_stop_fault_max;
+    uint32_t rpm_idle_stop_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_min_fault_min;
+    uint32_t rpm_idle_stop_fault_min_fault_max;
+    uint32_t rpm_idle_stop_fault_max_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_max;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_min_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_min;
+    uint32_t rpm_idle_stop_fault_min_fault_max_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_min_fault_max;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_max;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_min_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_min_fault_min_fault_max;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max_fault_max;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_min_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_max_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_max_fault_max;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_min_fault_min_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_min_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_max_fault_min_fault;
+    uint32_t rpm_idle_stop_fault_max_fault_max_fault_max_fault_max_fault;
+    uint32_t rpm_idle_stop_fault_min_fault_min_fault_max_fault_min_fault_min;
+    uint32_t rpm_idle_stop_fault_max_fault_min
+
+
+==================================================
+5. Adım 5: Statik Kontrol
+==================================================
+
+[Prompt]:
+Harika, test tasarım kriterlerini ve mock kurallarını ürettin. Test kodunu üretmeden önce son bir statik kontrol yapmanı istiyorum. Lütfen şimdiye kadar edindiğin tüm bilgileri (header dosyaları, fonksiyon arayüzü, iş akışı) ve kendi ürettiğin 'Bölüm 4: Bağımlılıklar ve Mock Davranış Kuralları'nı karşılaştırarak aşağıdaki kontrol listesini yanıtla:
+
+Statik Kontrol Listesi:
+
+Bağımlılık Kapsamı: Fonksiyonun iş akışında belirtilen tüm harici fonksiyon çağrıları 'Bağımlı Fonksiyonlar' listene dahil edildi mi? Gözden kaçan bir çağrı var mı?
+
+Mock Senaryo Derinliği: 'Mock Davranış Mantığı' bölümünde, her bir bağımlı fonksiyon için hem başarılı (success) hem de başarısız (failure) durumları kapsayan senaryolar tanımlandı mı? (örn: example_func_1'in hem geçerli bir struct döndürdüğü hem de NULL döndürdüğü durumlar.)
+
+Parametre Tutarlılığı: Mock davranış kurallarında kullanılan parametreler ve dönüş değerlerinin tipleri, Adım 2'de verilen header dosyalarındaki fonksiyon imzalarıyla tam olarak uyumlu mu?
+
+Hata Durumu İlişkisi: Fonksiyonun 'Hata İşleme Mantığı'nda belirtilen her bir hata durumu, mock'lanmış bir bağımlılık hatasıyla (dependency failure) veya geçersiz bir girdiyle (invalid input) tetiklenecek şekilde test senaryolarında planlandı mı?
+
+Değer Kesinliği (Value Precision): Mock davranış kurallarındaki tüm dönüş değerleri, yan etkiler ve beklenen parametreler, genel ifadeler ('bir değer', 'bir struct') yerine somut ve test edilebilir değerler (örn: 5, NULL, {'id': 123, 'status': true}, "Error message") ile mi tanımlanmış?
+
+Lütfen bu beş maddeyi kontrol ettiğini, her şeyin eksiksiz ve tutarlı olduğunu onayla. Eğer bir eksiklik fark edersen, şimdi düzelt. Onayının ardından son üretim komutunu vereceğim.
+
+[LLM Cevabı]:
+)(EngineError_t error);
+typedef void (*EnginePerformanceCallback_t)(PerformanceMetrics_t *metrics);
+
+/* EngineState tipleri */
+typedef enum {
+    ENGINE_STATE_OFF,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum {
+    ENGINE_ERROR_NONE,
+    ENGINE_ERROR_STARTING,
+    ENGINE_ERROR_RUNNING,
+    ENGINE_ERROR_STOPPING,
+    ENGINE_ERROR_UNKNOWN
+} EngineError_t;
+
+/* EngineConfig tipleri */
+typedef struct {
+    uint32_t max_rpm;
+    uint32_t min_rpm;
+    uint32_t max_throttle;
+    uint32_t min_throttle;
+    uint32_t max_fuel;
+    uint32_t min_fuel;
+    uint32_t max_temperature;
+    uint32_t min_temperature;
+    uint32_t max_torque;
+    uint32_t min_torque;
+    uint32_t max_speed;
+    uint32_t min_speed;
+    uint32_t max_current;
+    uint32_t min_current;
+    uint32_t max_voltage;
+    uint32_t min_voltage;
+    uint32_t max_power;
+    uint32_t min_power;
+} EngineConfig_t;
+
+/* PerformanceMetrics tipleri */
+typedef struct {
+    uint32_t rpm;
+    uint32_t throttle;
+    uint32_t fuel;
+    uint32_t temperature;
+    uint32_t torque;
+    uint32_t speed;
+    uint32_t current;
+    uint32_t voltage;
+    uint32_t power;
+} PerformanceMetrics_t;
+
+/* EngineControl tipleri */
+typedef struct {
+    EngineState_t state;
+    EngineError_t error;
+    PerformanceMetrics_t metrics;
+    EngineConfig_t config;
+    EngineCallback_t callbacks;
+} EngineControl_t;
+
+/* ============================================================================
+   FONKSIYON PROTOTİPLERİ
+   ============================================================================ */
+
+/**
+ * @brief EngineControl nesnesini oluşturur
+ * @details EngineControl nesnesini oluşturur. EngineControl nesnesinin başlangıç değerleri EngineState_OFF, EngineError_NONE, EngineConfig_t ve EngineCallback_t tipindeki başlangıç değerlerine sahiptir.
+ * @return EngineControl nesnesi
+ */
+EngineControl_t *engine_control_create(void);
+
+/**
+ * @brief EngineControl nesnesini yok eder
+ * @details EngineControl nesnesini yok eder. EngineControl nesnesinin hafızasını da yok eder.
+ * @param[in] control EngineControl nesnesi
+ */
+void engine_control_destroy(EngineControl_t *control);
+
+/**
+ * @brief EngineControl nesnesinin durumunu değiştirir
+ * @details EngineControl nesnesinin durumunu değiştirir. EngineControl nesnesinin durumu değiştiğinde EngineStateChangeCallback_t tipinde bir callback fonksiyonu çağrılır.
+ * @param[in] control EngineControl nesnesi
+ * @param[in] new_state Yeni durum
+ */
+void engine_control_set_state(EngineControl_t *control, EngineState_t new_state);
+
+/**
+ * @brief EngineControl nesnesinin hata durumunu değiştirir
+ * @details EngineControl nesnesinin hata durumunu değiştirir. EngineControl nesnesinin hata durumu değiştiğinde EngineErrorCallback_t tipinde bir callback fonksiyonu çağrılır.
+ * @param[in] control EngineControl nesnesi
+ * @param[in] new_error Yeni hata durumu
+ */
+void engine_control_set_error(EngineControl_t *control, EngineError_t new_error);
+
+/**
+ * @brief EngineControl nesnesinin performans metriklerini değiştirir
+ * @details EngineControl nesnesinin performans metriklerini değiştirir. EngineControl nesnesinin performans metriklerini değiştiğinde EnginePerformanceCallback_t tipinde bir callback fonksiyonu çağrılır.
+ * @param[in] control EngineControl nesnesi
+ * @param[in] metrics Yeni performans metrikleri
+ */
+void engine_control_set_metrics(EngineControl_t *control, PerformanceMetrics_t *metrics);
+
+/**
+ * @brief EngineControl nesnesinin config parametrelerini değiştirir
+ * @details EngineControl nesnesinin config parametrelerini değiştirir. EngineControl nesnesinin config parametrelerini değiştiğinde EngineConfigCallback_t tipinde bir callback fonksiyonu çağrılır.
+ * @param[in] control EngineControl nesnesi
+ * @param[in] config Yeni config parametreleri
+ */
+void engine_control_set_config(EngineControl_t *control, EngineConfig_t *config);
+
+/**
+ * @brief EngineControl nesnesinin
+
+
+==================================================
+6. Adım 6: Final Briefing
+==================================================
+
+[Prompt]:
+Mükemmel, tüm kontroller tamamlandı. Şimdi son ve en kritik adıma geçiyoruz: Bilgi Sıkıştırma.
+
+Şimdiye kadar konuştuğumuz her şeyi—header dosyaları, fonksiyon arayüzü, iş akışı, test kriterleri ve mock kuralları—aşağıdaki şablona uygun olarak, tek ve kapsamlı bir 'Final Test Brifingi' belgesinde birleştirmeni istiyorum. Bu belge, bir sonraki ve son komutumda test kodunu yazarken başvuracağın tek ve nihai kaynak olacaktır.
+
+Lütfen aşağıdaki brifingi eksiksiz doldur:
+
+Final Test Brifingi: engine_get_status
+
+Test Edilecek Fonksiyon:
+
+engine_get_status
+
+Teknik Arayüz:
+
+İmza: [Fonksiyonun tam imzası, örn: int example_func(int param_a, ...)]
+
+Parametreler: [Parametrelerin kısa açıklamaları ve kısıtlamaları]
+
+Dönüş Değeri: [Dönüş değerlerinin anlamları, örn: 0=Başarı, -1=Hata]
+
+Temel İş Akışı Özeti:
+
+[İş akışının 3-4 maddelik özeti, örn: Parametreleri doğrular, example_func_1'i çağırır, dönen değere göre example_func_2'yi çağırır veya başarılı döner.]
+
+Bağımlılıklar ve Kesin Mock Kuralları:
+
+[Her bağımlı fonksiyon için başarı ve hata senaryolarını somut değerlerle belirt]
+
+Temel Test Senaryoları (Kapsam):
+
+[Geçerli girdilerle başarılı çalışma yolu testi, geçersiz girdi testleri, bağımlılık hata testleri, sınır değer testleri]
+
+Bu özeti oluşturduktan sonra, başka bir şey yapmadan sadece onayı bekle.
+
+[LLM Cevabı]:
+)(EngineError_t error);
+
+/* EngineState tipleri */
+typedef enum EngineState
+{
+    ENGINE_STATE_OFF,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum EngineError
+{
+    ENGINE_ERROR_NONE,
+    ENGINE_ERROR_STARTING,
+    ENGINE_ERROR_RUNNING,
+    ENGINE_ERROR_STOPPING,
+    ENGINE_ERROR_OFF
+} EngineError_t;
+
+/* EngineConfig tipleri */
+typedef struct EngineConfig
+{
+    uint32_t max_rpm;
+    uint32_t min_rpm;
+    uint32_t max_throttle;
+    uint32_t min_throttle;
+    uint32_t max_rpm_change_rate;
+    uint32_t max_throttle_change_rate;
+    uint32_t max_rpm_change_rate_error;
+    uint32_t max_throttle_change_rate_error;
+    uint32_t max_rpm_change_rate_error_count;
+    uint32_t max_throttle_change_rate_error_count;
+    uint32_t max_rpm_change_rate_error_count_threshold;
+    uint32_t max_throttle_change_rate_error_count_threshold;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_throttle_change_rate_error_count_threshold_duration_duration;
+    uint32_t max_rpm_change_rate_error_count_threshold_duration_duration
+
+
+==================================================
+7. Adım 7: Test Kodu
+==================================================
+
+[Prompt]:
+Harika. Lütfen şimdiye kadar verdiğim tüm bilgileri (rol tanımı, header dosyaları, engine_get_status fonksiyonunun arayüzü, fonksiyonel davranışı ve senin türettiğin test tasarım kriterleri ile mock davranış kuralları) kullanarak, engine_get_status fonksiyonu için Ceedling/Unity formatında tüm test senaryolarını şimdi oluştur. Her test senaryosu için uygun Unity ve CMock makrolarını kullan.
+
+[LLM Cevabı]:
+)(EngineError_t error);
+
+/* EngineState tipleri */
+typedef enum EngineState
+{
+    ENGINE_STATE_OFF,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum EngineError
+{
+    ENGINE_ERROR_NONE,
+    ENGINE_ERROR_START_TIMEOUT,
+    ENGINE_ERROR_STOP_TIMEOUT,
+    ENGINE_ERROR_START_RPM_TOO_LOW,
+    ENGINE_ERROR_START_RPM_TOO_HIGH,
+    ENGINE_ERROR_START_TICKS_TOO_LOW,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_STOP,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP
+
+
+==================================================
+ÜRETİLEN TEST KODU (FİNAL)
+==================================================
+
+)(EngineError_t error);
+
+/* EngineState tipleri */
+typedef enum EngineState
+{
+    ENGINE_STATE_OFF,
+    ENGINE_STATE_STARTING,
+    ENGINE_STATE_RUNNING,
+    ENGINE_STATE_STOPPING,
+    ENGINE_STATE_ERROR
+} EngineState_t;
+
+/* EngineError tipleri */
+typedef enum EngineError
+{
+    ENGINE_ERROR_NONE,
+    ENGINE_ERROR_START_TIMEOUT,
+    ENGINE_ERROR_STOP_TIMEOUT,
+    ENGINE_ERROR_START_RPM_TOO_LOW,
+    ENGINE_ERROR_START_RPM_TOO_HIGH,
+    ENGINE_ERROR_START_TICKS_TOO_LOW,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_STOP,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_STOP_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP,
+    ENGINE_ERROR_START_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_RPM_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_START_TICKS_TOO_HIGH_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_LOW_AFTER_START_AND_STOP_AND_START_AND_STOP_AND_START,
+    ENGINE_ERROR_STOP_RPM_TOO_HIGH_AFTER_START_AND_STOP

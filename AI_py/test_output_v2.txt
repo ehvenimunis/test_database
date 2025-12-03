@@ -1,0 +1,1119 @@
+==================================================
+7 ADIMLI TEST ÜRETİM SÜRECİ - SONUÇLAR
+==================================================
+
+
+==================================================
+1. Adım 1: Girizgah
+==================================================
+
+[Prompt]:
+Merhaba. Sen, C dili için Ceedling test çatısını, özellikle de CMock kullanarak harici bağımlılıkları mock'layarak ve Unity test koşucusunu kullanarak birim testleri yazan uzman bir yazılım test mühendisisin. Seninle birlikte bir C modülü için kapsamlı birim testleri geliştireceğiz. Görevi tamamlaman için gerekli tüm bilgileri sana aşama aşama sunacağım:
+
+Önce, genel bağlamı (header dosyalarını) vereceğim.
+Sonra, test edilecek spesifik fonksiyonun arayüzünü sunacağım.
+Ardından, fonksiyonun detay...
+
+[LLM Cevabı]:
+```c
+/**
+ * @file main.c
+ * @author  ()
+ * @brief Main file for the project
+ * @version 0.1
+ * @date 2021-07-30
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include "main.h"
+
+
+int main(void) {
+    printf("Hello World!\n");
+
+    return EXIT_SUCCESS;
+}/src/main.c
+/**
+ * @file main.c
+ * @author  ()
+ * @brief Main file for the project
+ * @version 0.1
+ * @date 2021-07-30
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+#include <stdio.h>
+#include <stdlib.h>
+#include "main.h"
+
+
+int main(void) {
+    printf("Hello World!\n");
+
+    return EXIT_SUCCESS;
+}
+
+
+==================================================
+2. Adım 2: Çevreyi Tanımlama
+==================================================
+
+[Prompt]:
+Harika. Şimdi sana projenin teknik bağlamını sunuyorum. Aşağıda, test edeceğimiz modülün ve onun bağımlı olduğu modüllerin header dosyaları bulunmaktadır. Bu dosyalardaki tüm fonksiyon imzalarını ve veri yapılarını analiz et ve hafızanda tut. Bu bilgiler, CMock'un mock objeler oluşturması ve senin de bağımlılıkları doğru bir şekilde anlaman için temel oluşturacaktır.
+
+/**
+ * @file sensor_interface.h
+ * @brief Sensör Arayüzü Modülü - Motor Kontrol Sisteminin Bağımlılığı
+ * @details Tüm sensörleri...
+
+[LLM Cevabı]:
+*/
+
+/**
+ * @brief Yakıt basınç sensöründen değer okur
+ * @return Mevcut yakıt basınç değeri
+ */
+uint16_t sensor_read_fuel_pressure_sensor(void);
+
+/**
+ * @brief Yakıt basınç sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_fuel_pressure_sensor_status(void);
+
+/**
+ * @brief Yakıt basınç sensörünü kalibre eder
+ * @param reference_pressure Referans yakıt basınç değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_fuel_pressure_sensor(uint16_t reference_pressure);
+
+/**
+ * @brief Yakıt basınç limitini ayarlar
+ * @param min_pressure Minimum yakıt basınç
+ * @param max_pressure Maksimum yakıt basınç
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_fuel_pressure_limits(uint16_t min_pressure, uint16_t max_pressure);
+
+/* ============================================================================
+   OXYGEN LEVEL
+
+
+==================================================
+3. Adım 3: Fonksiyonel Davranış
+==================================================
+
+[Prompt]:
+Mükemmel. Şimdi, engine_get_status fonksiyonunun detaylı fonksiyonel davranış ve mantık bölümü aşağıdadır. Bu belgedeki bilgiyi, daha önce edindiğin genel bağlam ve engine_get_status fonksiyonunun teknik arayüz bilgisiyle birleştirerek içselleştir. Fonksiyon içindeki static veya internal durum değişkenlerine doğrudan erişilemeyeceği için, bu değişkenlerin etkileri yalnızca gözlemlenebilir sonuçlar (örneğin dönüş değerleri veya çağrı sıraları) üzerinden test edilmelidir.
+
+Kapsamlı Detay Tasarım B...
+
+[LLM Cevabı]:
+ksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Yakıt basınç sensöründen değer okur
+ * @return Mevcut yakıt basınç değeri
+ */
+uint16_t sensor_read_fuel_pressure_sensor(void);
+
+/**
+ * @brief Yakıt basınç sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_fuel_pressure_sensor_status(void);
+
+/**
+ * @brief Yakıt basınç sensörünü kalibre eder
+ * @param reference_pressure Referans yakıt basınç değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_fuel_pressure_sensor(uint16_t reference_pressure);
+
+/**
+ * @brief Yakıt basınç limitini ayarlar
+ * @param min_pressure Minimum yakıt basınç
+ * @param max_pressure Maksimum yakıt basınç
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_fuel_pressure_limits(uint16_t min_pressure, uint16_t max_pressure);
+
+/* ============================================================================
+
+
+==================================================
+4. Adım 4: Test Tasarım Kriterleri
+==================================================
+
+[Prompt]:
+Mükemmel. engine_get_status için tüm genel bağlam, arayüz ve detaylı fonksiyonel davranış bilgilerine sahipsin. Şimdi senden, bu bilgilere dayanarak, engine_get_status için aşağıdaki iki bölümü eksiksiz ve detaylı bir şekilde üretmeni istiyorum:
+
+Bölüm 3: Test Tasarım Kriterleri ve Kapsam Alanları
+
+3.1. Test Tasarım Teknikleri: Bu fonksiyonu test ederken [buraya Eşdeğerlik Bölümlemesi, Sınır Değer Analizi, Hata Tahmini vb. uygun teknikleri belirle] tekniklerini kullanmalısın.
+
+3.2. Geçerli Girdi...
+
+[LLM Cevabı]:
+ksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Yakıt basınç sensöründen değer okur
+ * @return Mevcut yakıt basınç değeri
+ */
+uint16_t sensor_read_fuel_pressure_sensor(void);
+
+/**
+ * @brief Yakıt basınç sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_fuel_pressure_sensor_status(void);
+
+/**
+ * @brief Yakıt basınç sensörünü kalibre eder
+ * @param reference_pressure Referans yakıt basınç değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_fuel_pressure_sensor(uint16_t reference_pressure);
+
+/**
+ * @brief Yakıt basınç limitini ayarlar
+ * @param min_pressure Minimum yakıt basınç
+ * @param max_pressure Maksimum yakıt basınç
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_fuel_pressure_limits(uint16_t min_pressure, uint16_t max_pressure);
+
+/* ============================================================================
+   OXYGEN LEVEL SENSÖRÜ FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Oxygen level sensöründen değer okur
+ * @return Mevcut oxygen level değeri
+ */
+uint8_t sensor_read_oxygen_level_sensor(void);
+
+/**
+ * @brief Oxygen level sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_oxygen_level_sensor_status(void);
+
+/**
+ * @brief Oxygen level sensörünü kalibre eder
+ * @param reference_level Referans oxygen level değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_oxygen_level_sensor(uint8_t reference_level);
+
+/**
+ * @brief Oxygen level limitini ayarlar
+ * @param min_level Minimum oxygen level
+ * @param max_level Maksimum oxygen level
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_oxygen_level_limits(uint8_t min_level, uint8_t max_level);
+
+/* ============================================================================
+   BOOST PRESSURE SENSÖRÜ FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Boost pressure sensöründen değer okur
+ * @return Mevcut boost pressure değeri
+ */
+uint16_t sensor_read_boost_pressure_sensor(void);
+
+/**
+ * @brief Boost pressure sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_boost_pressure_sensor_status(void);
+
+/**
+ * @brief Boost pressure sensörünü kalibre eder
+ * @param reference_pressure Referans boost pressure değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_boost_pressure_sensor(uint16_t reference_pressure);
+
+/**
+ * @brief Boost pressure limitini ayarlar
+ * @param min_pressure Minimum boost pressure
+ * @param max_pressure Maksimum boost pressure
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_boost_pressure_limits(uint16_t min_pressure, uint16_t max_pressure);
+
+/* ============================================================================
+   TURBO ACTIVE SENSÖRÜ FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Turbo active sensöründen değer okur
+ * @return true aktif, false pasif
+ */
+bool sensor_read_turbo_active_sensor(void);
+
+/**
+ * @brief Turbo active sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_turbo_active_sensor_status(void);
+
+/**
+ * @brief Turbo active sensörünü kalibre eder
+ * @param reference_active Referans turbo active değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_turbo_active_sensor(bool reference_active);
+
+/**
+ * @brief Turbo active limitini ayarlar
+ * @param min_active Minimum turbo active
+ * @param max_active Maksimum turbo active
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_turbo_active_limits(bool min_active, bool max_active);
+
+/* ============================================================================
+   SENSÖRLERİN OKUNMASI FONKSİYONU (5 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Sensörlerin okunmasını başlatır
+ * @return true başarılı, false başarısız
+ */
+bool sensor_start_reading(void);
+
+/**
+ * @brief Sensörlerin okunmasını durdurur
+ * @return true başarılı, false başarısız
+ */
+bool sensor_stop_reading(void);
+
+/**
+ * @brief Sensörlerin okunmasını durdurur
+ * @return true başarılı, false başarısız
+ */
+bool sensor_is_reading_running(void);
+
+/**
+ * @brief Sensörlerin okunmasını durdurur
+ * @return true başarılı, false başarısız
+ */
+SensorStatus_t sensor_get_last_status(void);
+
+/**
+ * @brief Sensörlerin okunmasını durdurur
+ * @return true başarılı, false başarısız
+ */
+SensorResult_t sensor_get_last_result(void);
+
+/**
+ * @brief Sensörlerin okunmasını durdurur
+ * @return true başarılı, false başarısız
+ */
+SensorDataPoint_t sensor_get_last_data_point(void);
+
+/**
+ * @brief Sensörlerin okunmasını durdurur
+ * @return true başarılı, false başarısız
+ */
+SensorBatch_
+
+
+==================================================
+5. Adım 5: Statik Kontrol
+==================================================
+
+[Prompt]:
+Harika, test tasarım kriterlerini ve mock kurallarını ürettin. Test kodunu üretmeden önce son bir statik kontrol yapmanı istiyorum. Lütfen şimdiye kadar edindiğin tüm bilgileri (header dosyaları, fonksiyon arayüzü, iş akışı) ve kendi ürettiğin 'Bölüm 4: Bağımlılıklar ve Mock Davranış Kuralları'nı karşılaştırarak aşağıdaki kontrol listesini yanıtla:
+
+Statik Kontrol Listesi:
+
+Bağımlılık Kapsamı: Fonksiyonun iş akışında belirtilen tüm harici fonksiyon çağrıları 'Bağımlı Fonksiyonlar' listene dahil ...
+
+[LLM Cevabı]:
+)
+   ============================================================================ */
+
+/**
+ * @brief Turbo aktif edilmesi için gereken komutu gönderir
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_turbo_on_command(void);
+
+/**
+ * @brief Turbo pasif edilmesi için gereken komutu gönderir
+ * @return true başarılı, false başarısız
+ */
+bool sensor_write_turbo_off_command(void);
+
+/**
+ * @brief Turbo sensörü durumunu kontrol eder
+ * @return true aktif, false pasif
+ */
+bool sensor_check_turbo_status(void);
+
+/**
+ * @brief Turbo sensörünü kalibre eder
+ * @param reference_turbo Referans turbo seviyesi
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_turbo_sensor(uint8_t reference_turbo);
+
+/**
+ * @brief Turbo seviyesini ölçer
+ * @return Turbo seviyesi yüzdesi (0-100)
+ */
+uint8_t sensor_read_turbo_sensor(void);
+
+/* ============================================================================
+   BOOST BASINCI SENSÖRÜ FONKSİYONLARI (3 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Boost basıncı sensöründen değer okur
+ * @return Mevcut boost basıncı kPa cinsinden
+ */
+uint16_t sensor_read_boost_pressure_sensor(void);
+
+/**
+ * @brief Boost basıncı sensörü durumunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool sensor_check_boost_pressure_status(void);
+
+/**
+ * @brief Boost basıncı sensörünü kalibre eder
+ * @param reference_pressure Referans basınç değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_boost_pressure_sensor(uint16_t reference_pressure);
+
+
+#endif //SENSOR_INTERFACE_H/test/test_sensor_interface.c
+#include "unity.h"
+#include "mock_sensor_driver.h"
+#include "sensor_interface.h"
+
+void setUp(void) {}
+void tearDown(void) {}
+
+void test_sensor_initialize(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_initialize());
+
+    TEST_ASSERT_EQUAL(true, sensor_check_rpm_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_temperature_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_fuel_pressure_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_fuel_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_oxygen_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_turbo_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_boost_pressure_status());
+}
+
+void test_sensor_shutdown(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_shutdown());
+
+    TEST_ASSERT_EQUAL(false, sensor_check_rpm_sensor_status());
+    TEST_ASSERT_EQUAL(false, sensor_check_temperature_sensor_status());
+    TEST_ASSERT_EQUAL(false, sensor_check_fuel_pressure_status());
+    TEST_ASSERT_EQUAL(false, sensor_check_fuel_sensor_status());
+    TEST_ASSERT_EQUAL(false, sensor_check_oxygen_sensor_status());
+    TEST_ASSERT_EQUAL(false, sensor_check_turbo_status());
+    TEST_ASSERT_EQUAL(false, sensor_check_boost_pressure_status());
+}
+
+void test_sensor_calibrate_all(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_calibrate_all());
+
+    TEST_ASSERT_EQUAL(true, sensor_check_rpm_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_temperature_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_fuel_pressure_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_fuel_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_oxygen_sensor_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_turbo_status());
+    TEST_ASSERT_EQUAL(true, sensor_check_boost_pressure_status());
+}
+
+void test_sensor_read_rpm_sensor(void)
+{
+    TEST_ASSERT_EQUAL(1000, sensor_read_rpm_sensor());
+}
+
+void test_sensor_write_rpm_command(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_write_rpm_command(900));
+    TEST_ASSERT_EQUAL(true, sensor_check_rpm_sensor_status());
+}
+
+void test_sensor_check_rpm_sensor_status(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_check_rpm_sensor_status());
+}
+
+void test_sensor_calibrate_rpm_sensor(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_calibrate_rpm_sensor(700));
+    TEST_ASSERT_EQUAL(true, sensor_check_rpm_sensor_status());
+}
+
+void test_sensor_read_temperature_sensor(void)
+{
+    TEST_ASSERT_EQUAL(-20, sensor_read_temperature_sensor());
+}
+
+void test_sensor_check_temperature_sensor_status(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_check_temperature_sensor_status());
+}
+
+void test_sensor_calibrate_temperature_sensor(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_calibrate_temperature_sensor(-25));
+    TEST_ASSERT_EQUAL(true, sensor_check_temperature_sensor_status());
+}
+
+void test_sensor_set_temperature_limits(void)
+{
+    TEST_ASSERT_EQUAL(true, sensor_set_temperature_limits(-25, 10));
+    TEST_ASSERT_EQUAL(true, sensor_check_temperature_sensor_status());
+}
+
+void test_sensor_read_fuel_pressure_sensor(void)
+{
+    TEST_ASSERT_EQUAL(1000, sensor_read_fuel_pressure_sensor());
+}
+
+void
+
+
+==================================================
+6. Adım 6: Final Briefing
+==================================================
+
+[Prompt]:
+Mükemmel, tüm kontroller tamamlandı. Şimdi son ve en kritik adıma geçiyoruz: Bilgi Sıkıştırma.
+
+Şimdiye kadar konuştuğumuz her şeyi—header dosyaları, fonksiyon arayüzü, iş akışı, test kriterleri ve mock kuralları—aşağıdaki şablona uygun olarak, tek ve kapsamlı bir 'Final Test Brifingi' belgesinde birleştirmeni istiyorum. Bu belge, bir sonraki ve son komutumda test kodunu yazarken başvuracağın tek ve nihai kaynak olacaktır.
+
+Lütfen aşağıdaki brifingi eksiksiz doldur:
+
+Final Test Brifingi: engine_...
+
+[LLM Cevabı]:
+stability(void);/** * @brief RPM hareketini durdurur * @return true başarılı, false başarısız */bool engine_stop_rpm_movement(void);/* ============================================================================   YAKIT ENJEKSIYONU KONTROL FONKSİYONLARI (7 fonksiyon)   ============================================================================ *//** * @brief Yakıt enjeksiyonu oranını ayarlar * @param injection_percentage Enjeksiyon oranı (1-100) * @return true başarılı, false başarısız */bool engine_set_fuel_injection_percentage(uint8_t injection_percentage);/** * @brief Yakıt enjeksiyonu oranını döndürür * @return Yakıt enjeksiyonu oranı */uint8_t engine_get_fuel_injection_percentage(void);/** * @brief Yakıt enjeksiyonu oranını arttırır * @param increment_percentage Artış yüzdesi (1-100) * @return Yeni yakıt enjeksiyonu oranı */uint8_t engine_increase_fuel_injection_percentage(uint8_t increment_percentage);/** * @brief Yakıt enjeksiyonu oranını azaltır * @param decrement_percentage Azalış yüzdesi (1-100) * @return Yeni yakıt enjeksiyonu oranı */uint8_t engine_decrease_fuel_injection_percentage(uint8_t decrement_percentage);/** * @brief Yakıt enjeksiyonu oranını limitini ayarlar * @param max_percentage Maksimum yakıt enjeksiyonu oranı (1-100) * @return true başarılı, false başarısız */bool engine_set_max_fuel_injection_percentage(uint8_t max_percentage);/** * @brief Yakıt enjeksiyonu oranını limitini döndürür * @return Maksimum yakıt enjeksiyonu oranı */uint8_t engine_get_max_fuel_injection_percentage(void);/** * @brief Yakıt enjeksiyonu oranını hafifletir * @return true başarılı, false başarısız */bool engine_reduce_fuel_injection_percentage(void);/* ============================================================================   TUTUŞTURMA ZAMANI KONTROL FONKSİYONLARI (9 fonksiyon)   ============================================================================ *//** * @brief Tutuşturma zamanını ayarlar * @param timing_ms Tutuşturma zamanı (100-1000 ms) * @return true başarılı, false başarısız */bool engine_set_ignition_timing(uint16_t timing_ms);/** * @brief Tutuşturma zamanını döndürür * @return Tutuşturma zamanı */uint16_t engine_get_ignition_timing(void);/** * @brief Tutuşturma zamanını arttırır * @param increment_milliseconds Artış miktarı (100-1000 ms) * @return Yeni tutuşturma zamanı */uint16_t engine_increase_ignition_timing(uint16_t increment_milliseconds);/** * @brief Tutuşturma zamanını azaltır * @param decrement_milliseconds Azalış miktarı (100-1000 ms) * @return Yeni tutuşturma zamanı */uint16_t engine_decrease_ignition_timing(uint16_t decrement_milliseconds);/** * @brief Tutuşturma zamanını limitini ayarlar * @param max_timing_ms Maksimum tutuşturma zamanı (1000 ms) * @return true başarılı, false başarısız */bool engine_set_max_ignition_timing(uint16_t max_timing_ms);/** * @brief Tutuşturma zamanını limitini döndürür * @return Maksimum tutuşturma zamanı */uint16_t engine_get_max_ignition_timing(void);/** * @brief Tutuşturma zamanını hafifletir * @return true başarılı, false başarısız */bool engine_reduce_ignition_timing(void);/* ============================================================================   DIŞ KABLO KONTROL FONKSİYONLARI (6 fonksiyon)   ============================================================================ *//** * @brief Diş kablosunu açar * @return true başarılı, false başarısız */bool engine_open_displacement_connector(void);/** * @brief Diş kablosunu kapatır * @return true başarılı, false başarısız */bool engine_close_displacement_connector(void);/** * @brief Diş kablosunu açıp kapatır * @param open_duration Açma süresi (100-1000 ms) * @param close_duration Kapatma süresi (100-1000 ms) * @return true başarılı, false başarısız */bool engine_toggle_displacement_connector(uint16_t open_duration, uint16_t close_duration);/** * @brief Diş kablosunu açıp kapatır * @param open_duration Açma süresi (100-1000 ms) * @return true başarılı, false başarısız */bool engine_open_displacement_connector_for(uint16_t open_duration);/** * @brief Diş kablosunu kapatır * @param close_duration Kapatma süresi (100-1000 ms) * @return true başarılı, false başarısız */bool engine_close_displacement_connector_for(uint16_t close_duration);/* ============================================================================   GAZ KABLO KONTROL FONKSİYONLARI (6 fonksiyon)   ============================================================================ *//** * @brief Gaz kablosunu açar * @return true başarılı, false başarısız */bool engine_open_gas_connector(void);/** * @brief Gaz kablosunu kapatır * @return true başarılı, false başarısız */bool engine_close_gas_connector(void);/** * @brief Gaz kablosunu açıp kapatır * @
+
+
+==================================================
+7. Adım 7: Test Kodu
+==================================================
+
+[Prompt]:
+Harika. Lütfen şimdiye kadar verdiğim tüm bilgileri (rol tanımı, header dosyaları, engine_get_status fonksiyonunun arayüzü, fonksiyonel davranışı ve senin türettiğin test tasarım kriterleri ile mock davranış kuralları) kullanarak, engine_get_status fonksiyonu için Ceedling/Unity formatında tüm test senaryolarını şimdi oluştur. Her test senaryosu için uygun Unity ve CMock makrolarını kullan.
+
+KRİTİK UYARI: Bu adımda SADECE C test kodu üret. Test dosyasını tam olarak yaz.
+- #include direktifleri
+-...
+
+[LLM Cevabı]:
+bool sensor_check_turbo_active_sensor_status(void);
+
+/**
+ * @brief Turbo active sensörünü kalibre eder
+ * @param reference_value Referans turbo active değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_turbo_active_sensor(bool reference_value);
+
+/**
+ * @brief Turbo active limitini ayarlar
+ * @param min_value Minimum turbo active
+ * @param max_value Maksimum turbo active
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_turbo_active_limits(bool min_value, bool max_value);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param mode Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode(engine_status_mode_t status);
+
+/**
+ * @brief Engine status modunu okur
+ * @return Engine status modu
+ */
+engine_status_mode_t engine_status_get_mode(void);
+
+/**
+ * @brief Engine status modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_status_check_mode_status(void);
+
+/**
+ * @brief Engine status modunu kalibre eder
+ * @param reference_mode Referans engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_calibrate_mode(engine_status_mode_t reference_mode);
+
+/**
+ * @brief Engine status modu limitini ayarlar
+ * @param min_mode Minimum engine status modu
+ * @param max_mode Maksimum engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode_limits(engine_status_mode_t min_mode, engine_status_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param status Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode(engine_status_mode_t status);
+
+/**
+ * @brief Engine status modunu okur
+ * @return Engine status modu
+ */
+engine_status_mode_t engine_status_get_mode(void);
+
+/**
+ * @brief Engine status modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_status_check_mode_status(void);
+
+/**
+ * @brief Engine status modunu kalibre eder
+ * @param reference_mode Referans engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_calibrate_mode(engine_status_mode_t reference_mode);
+
+/**
+ * @brief Engine status modu limitini ayarlar
+ * @param min_mode Minimum engine status modu
+ * @param max_mode Maksimum engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode_limits(engine_status_mode_t min_mode, engine_status_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param status Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode(engine_status_mode_t status);
+
+/**
+ * @brief Engine status modunu okur
+ * @return Engine status modu
+ */
+engine_status_mode_t engine_status_get_mode(void);
+
+/**
+ * @brief Engine status modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_status_check_mode_status(void);
+
+/**
+ * @brief Engine status modunu kalibre eder
+ * @param reference_mode Referans engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_calibrate_mode(engine_status_mode_t reference_mode);
+
+/**
+ * @brief Engine status modu limitini ayarlar
+ * @param min_mode Minimum engine status modu
+ * @param max_mode Maksimum engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode_limits(engine_status_mode_t min_mode, engine_status_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param status Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarıs
+
+
+==================================================
+ÜRETİLEN TEST KODU (FİNAL)
+==================================================
+
+bool sensor_check_turbo_active_sensor_status(void);
+
+/**
+ * @brief Turbo active sensörünü kalibre eder
+ * @param reference_value Referans turbo active değeri
+ * @return true başarılı, false başarısız
+ */
+bool sensor_calibrate_turbo_active_sensor(bool reference_value);
+
+/**
+ * @brief Turbo active limitini ayarlar
+ * @param min_value Minimum turbo active
+ * @param max_value Maksimum turbo active
+ * @return true başarılı, false başarısız
+ */
+bool sensor_set_turbo_active_limits(bool min_value, bool max_value);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param mode Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode(engine_status_mode_t status);
+
+/**
+ * @brief Engine status modunu okur
+ * @return Engine status modu
+ */
+engine_status_mode_t engine_status_get_mode(void);
+
+/**
+ * @brief Engine status modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_status_check_mode_status(void);
+
+/**
+ * @brief Engine status modunu kalibre eder
+ * @param reference_mode Referans engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_calibrate_mode(engine_status_mode_t reference_mode);
+
+/**
+ * @brief Engine status modu limitini ayarlar
+ * @param min_mode Minimum engine status modu
+ * @param max_mode Maksimum engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode_limits(engine_status_mode_t min_mode, engine_status_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param status Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode(engine_status_mode_t status);
+
+/**
+ * @brief Engine status modunu okur
+ * @return Engine status modu
+ */
+engine_status_mode_t engine_status_get_mode(void);
+
+/**
+ * @brief Engine status modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_status_check_mode_status(void);
+
+/**
+ * @brief Engine status modunu kalibre eder
+ * @param reference_mode Referans engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_calibrate_mode(engine_status_mode_t reference_mode);
+
+/**
+ * @brief Engine status modu limitini ayarlar
+ * @param min_mode Minimum engine status modu
+ * @param max_mode Maksimum engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode_limits(engine_status_mode_t min_mode, engine_status_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param status Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode(engine_status_mode_t status);
+
+/**
+ * @brief Engine status modunu okur
+ * @return Engine status modu
+ */
+engine_status_mode_t engine_status_get_mode(void);
+
+/**
+ * @brief Engine status modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_status_check_mode_status(void);
+
+/**
+ * @brief Engine status modunu kalibre eder
+ * @param reference_mode Referans engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_calibrate_mode(engine_status_mode_t reference_mode);
+
+/**
+ * @brief Engine status modu limitini ayarlar
+ * @param min_mode Minimum engine status modu
+ * @param max_mode Maksimum engine status modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_status_set_mode_limits(engine_status_mode_t min_mode, engine_status_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE CONTROL FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine control modunu ayarlar
+ * @param status Engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode(engine_control_mode_t mode);
+
+/**
+ * @brief Engine control modunu okur
+ * @return Engine control modu
+ */
+engine_control_mode_t engine_control_get_mode(void);
+
+/**
+ * @brief Engine control modunu kontrol eder
+ * @return true sağlıklı, false hatalı
+ */
+bool engine_control_check_mode_status(void);
+
+/**
+ * @brief Engine control modunu kalibre eder
+ * @param reference_mode Referans engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_calibrate_mode(engine_control_mode_t reference_mode);
+
+/**
+ * @brief Engine control modu limitini ayarlar
+ * @param min_mode Minimum engine control modu
+ * @param max_mode Maksimum engine control modu
+ * @return true başarılı, false başarısız
+ */
+bool engine_control_set_mode_limits(engine_control_mode_t min_mode, engine_control_mode_t max_mode);
+
+/* ============================================================================
+   ENGINE STATUS FONKSİYONLARI (4 fonksiyon)
+   ============================================================================ */
+
+/**
+ * @brief Engine status modunu ayarlar
+ * @param status Engine status modu
+ * @return true başarılı, false başarıs
