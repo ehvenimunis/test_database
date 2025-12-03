@@ -20,6 +20,9 @@ if hasattr(torch, 'compile'):
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 import sys
+import re
+import os
+from pathlib import Path
 
 # ==============================================================================
 # AYARLAR (Burayı Kendi Bilgisayarına Göre Düzenle)
@@ -217,26 +220,214 @@ Sadece brifing METNİNİ üret."""
 
 def get_step7_prompt(function_name):
     """Adım 7: Üretim Komutu (Testleri Yaz!)"""
-    return f"""Harika. Lütfen şimdiye kadar verdiğim tüm bilgileri (rol tanımı, header dosyaları, {function_name} fonksiyonunun arayüzü, fonksiyonel davranışı ve senin türettiğin test tasarım kriterleri ile mock davranış kuralları) kullanarak, {function_name} fonksiyonu için Ceedling/Unity formatında tüm test senaryolarını şimdi oluştur. Her test senaryosu için uygun Unity ve CMock makrolarını kullan.
+    return f"""Sen bir C test kodu uzmanısın. {function_name} fonksiyonu için Ceedling/Unity formatında TAM ve EKSİKSİZ bir test dosyası yaz.
 
-KRİTİK UYARI: Bu adımda SADECE C test kodu üret. Test dosyasını tam olarak yaz.
-- #include direktifleri
-- Unity test fonksiyonları (TEST_ASSERT_EQUAL, TEST_ASSERT_TRUE vb.)
-- CMock mock tanımları (Mock_xxx_ExpectAndReturn vb.)
-- Tüm test senaryoları
-- Enum tanımları veya header dosyaları üretme
-- Sadece test kodu üret"""
+GEREKLİLİKLER:
+1. #include "unity.h" ve gerekli header dosyalarını ekle
+2. #include "cmock.h" ekle
+3. Mock edilecek bağımlı fonksiyonlar için CMock mock tanımları ekle
+4. setUp() ve tearDown() fonksiyonlarını yaz
+5. Her test senaryosu için ayrı test fonksiyonu yaz (test_ ile başlamalı)
+6. Unity makrolarını kullan (TEST_ASSERT_EQUAL, TEST_ASSERT_TRUE, TEST_ASSERT_FALSE vb.)
+7. CMock makrolarını kullan (Mock_xxx_ExpectAndReturn, Mock_xxx_Expect vb.)
+8. Geçerli girdi testleri, geçersiz girdi testleri, sınır değer testleri, bağımlılık hata testleri ekle
+
+KRİTİK: SADECE C test kodu üret. Enum tanımları, typedef'ler, header dosyaları ÜRETME. Sadece test_*.c dosyası içeriği üret."""
+
+# ==============================================================================
+# OTOMATİK BİLGİ TOPLAMA FONKSİYONLARI
+# ==============================================================================
+
+def get_project_root():
+    """Proje kök dizinini bul (AI_py klasörünün bir üstü)"""
+    current_dir = Path(__file__).parent.absolute()
+    # AI_py klasöründeysek bir üst dizine çık
+    if current_dir.name == "AI_py":
+        return current_dir.parent
+    return current_dir
+
+def find_function_module(function_name):
+    """Fonksiyon adından hangi modülde olduğunu bul"""
+    if function_name.startswith("engine_"):
+        return "engine_control"
+    elif function_name.startswith("sensor_"):
+        return "sensor_interface"
+    elif function_name.startswith("diagnostic_"):
+        return "vehicle_diagnostics"
+    else:
+        # Varsayılan olarak engine_control'ü dene
+        return "engine_control"
+
+def read_header_file(module_name):
+    """Header dosyasını oku"""
+    project_root = get_project_root()
+    header_file = project_root / f"{module_name}.h"
+    if header_file.exists():
+        with open(header_file, 'r', encoding='utf-8') as f:
+            return f.read()
+    return None
+
+def extract_function_signature(header_content, function_name):
+    """Header dosyasından fonksiyon imzasını ve dokümantasyonunu çıkar"""
+    if not header_content:
+        return None, None
+    
+    # Fonksiyon imzasını bul
+    pattern = rf'/\*\*.*?\*/\s*(\w+\s+{re.escape(function_name)}\s*\([^)]*\)\s*;)'
+    match = re.search(pattern, header_content, re.DOTALL)
+    
+    if not match:
+        # Daha basit pattern dene
+        pattern = rf'(\w+\s+{re.escape(function_name)}\s*\([^)]*\)\s*;)'
+        match = re.search(pattern, header_content)
+    
+    signature = match.group(1) if match else None
+    
+    # Dokümantasyonu bul (imzadan önceki @brief, @param, @return içeren yorum bloğu)
+    if match:
+        start_pos = match.start()
+        # Geriye doğru yorum bloğunu bul
+        doc_pattern = r'/\*\*.*?\*/'
+        doc_matches = list(re.finditer(doc_pattern, header_content[:start_pos], re.DOTALL))
+        if doc_matches:
+            doc = doc_matches[-1].group(0)
+            return signature, doc
+    
+    return signature, None
+
+def extract_all_dependencies(header_content):
+    """Header dosyasından tüm include'ları ve bağımlılıkları bul"""
+    includes = re.findall(r'#include\s+["<]([^">]+)[">]', header_content)
+    return includes
+
+def read_dependency_headers(dependencies):
+    """Bağımlılık header dosyalarını oku"""
+    project_root = get_project_root()
+    headers = {}
+    for dep in dependencies:
+        if dep.endswith('.h'):
+            dep_file = project_root / dep
+        else:
+            dep_file = project_root / f"{dep}.h"
+        
+        if dep_file.exists():
+            with open(dep_file, 'r', encoding='utf-8') as f:
+                headers[dep] = f.read()
+    return headers
+
+def extract_function_implementation(c_file, function_name):
+    """C dosyasından fonksiyon implementasyonunu çıkar"""
+    project_root = get_project_root()
+    c_file_path = project_root / c_file
+    if not c_file_path.exists():
+        return None
+    
+    with open(c_file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Fonksiyon implementasyonunu bul
+    # Pattern: return_type function_name(...) { ... }
+    pattern = rf'(\w+\s+{re.escape(function_name)}\s*\([^)]*\)\s*{{[^}}]*(?:{{[^}}]*}}[^}}]*)*}})'
+    match = re.search(pattern, content, re.DOTALL)
+    
+    if match:
+        return match.group(1)
+    
+    # Daha basit pattern - sadece fonksiyon başlangıcından sonraki 50 satır
+    pattern = rf'(\w+\s+{re.escape(function_name)}\s*\([^)]*\)\s*{{)'
+    match = re.search(pattern, content)
+    if match:
+        start = match.end()
+        # Sonraki 100 satırı al veya } bulana kadar
+        lines = content[start:].split('\n')
+        implementation_lines = []
+        brace_count = 1
+        for line in lines[:200]:  # Maksimum 200 satır
+            implementation_lines.append(line)
+            brace_count += line.count('{') - line.count('}')
+            if brace_count == 0:
+                break
+        return match.group(1) + '\n' + '\n'.join(implementation_lines)
+    
+    return None
+
+def read_module_readme(module_name):
+    """Modül README dosyasını oku"""
+    project_root = get_project_root()
+    readme_file = project_root / f"{module_name}_README.md"
+    if readme_file.exists():
+        with open(readme_file, 'r', encoding='utf-8') as f:
+            return f.read()
+    return None
+
+def build_function_interface_doc(function_name, signature, doc_comment):
+    """Fonksiyon arayüz dokümantasyonunu oluştur"""
+    doc = f"Kapsamlı Detay Tasarım Belgesi: {function_name} (Bölüm 1 ve Bölüm 2)\n\n"
+    doc += "Bölüm 1: Genel Bakış ve Amaç:\n\n"
+    
+    if doc_comment:
+        # @brief'den genel bakışı çıkar
+        brief_match = re.search(r'@brief\s+(.+?)(?:\n|@)', doc_comment, re.DOTALL)
+        if brief_match:
+            doc += brief_match.group(1).strip() + "\n\n"
+        else:
+            doc += f"{function_name} fonksiyonu motor kontrol sisteminin bir parçasıdır.\n\n"
+    else:
+        doc += f"{function_name} fonksiyonu motor kontrol sisteminin bir parçasıdır.\n\n"
+    
+    doc += "Bölüm 2: Teknik Arayüz Sözleşmesi:\n\n"
+    doc += f"Fonksiyon İmzası: {signature}\n\n" if signature else f"Fonksiyon İmzası: Bulunamadı\n\n"
+    
+    if doc_comment:
+        # @param'ları çıkar
+        params = re.findall(r'@param\[?(\w+)?\]?\s+(\w+)\s+(.+)', doc_comment)
+        if params:
+            doc += "Parametreler:\n"
+            for param_type, param_name, param_desc in params:
+                doc += f"{param_name}: {param_desc.strip()}\n"
+            doc += "\n"
+        
+        # @return'ü çıkar
+        return_match = re.search(r'@return\s+(.+)', doc_comment, re.DOTALL)
+        if return_match:
+            doc += f"Dönüş Değeri: {return_match.group(1).strip()}\n\n"
+    
+    return doc
+
+def build_functional_behavior_doc(function_name, implementation, readme_content):
+    """Fonksiyonel davranış dokümantasyonunu oluştur"""
+    doc = f"Kapsamlı Detay Tasarım Belgesi: {function_name} (Bölüm 3: Fonksiyonel Davranış ve Mantık)\n\n"
+    
+    doc += "Fonksiyon İş Akışı:\n"
+    if implementation:
+        # Implementasyondan iş akışını çıkar
+        doc += "Fonksiyon implementasyonu aşağıdadır:\n\n"
+        doc += "```c\n"
+        doc += implementation[:1000]  # İlk 1000 karakter
+        doc += "\n```\n\n"
+    else:
+        doc += "Implementasyon bulunamadı. README dosyasından genel bilgiler kullanılacak.\n\n"
+    
+    if readme_content:
+        # README'den ilgili bilgileri çıkar
+        doc += "Modül Genel Bilgileri:\n"
+        doc += readme_content[:500] + "\n\n"
+    
+    return doc
 
 # ==============================================================================
 # LLM İLE İLETİŞİM FONKSİYONU
 # ==============================================================================
 
-def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=None):
+def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=None, use_minimal_history=False):
     """LLM'e mesaj gönder ve cevap al"""
-    # Konuşma geçmişini akıllıca yönet - sadece son 2-3 mesajı tut
-    if conversation_history:
-        # Son 4-6 öğeyi al (her adım 2 öğe: prompt + response)
-        recent_history = conversation_history[-6:] if len(conversation_history) > 6 else conversation_history
+    # Son adımda conversation history'yi sıfırla veya minimal tut
+    if step_number == 7 or use_minimal_history:
+        # Son adımda sadece final briefing'i gönder, önceki adımları gönderme
+        full_prompt = prompt
+    elif conversation_history:
+        # Diğer adımlarda sadece son 2 mesajı tut (1 adım: prompt + response)
+        recent_history = conversation_history[-2:] if len(conversation_history) > 2 else conversation_history
         full_prompt = "\n\n".join(recent_history) + "\n\n" + prompt
     else:
         full_prompt = prompt
@@ -246,21 +437,35 @@ def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=
     print("\n[LLM'e gönderiliyor...]")
     
     # Token limitini ayarla - input için daha fazla yer bırak
-    max_input_length = 3072  # Model'in maksimum context window'una göre ayarla
+    # Son adımda daha fazla bilgi gönderebilmek için daha yüksek limit
+    if step_number == 7:
+        max_input_length = 2048  # Son adımda daha fazla bilgi göndermek için
+    else:
+        max_input_length = 2048  # Diğer adımlar için standart limit
+    
     inputs = tokenizer(
         formatted_prompt, 
         return_tensors="pt", 
         truncation=True, 
-        max_length=min(max_input_length, 2048)
+        max_length=max_input_length
     ).to("cuda")
     
     # Adım numarasına göre token limitini ayarla
     if step_number == 7:
-        # Son adımda daha uzun çıktı bekleniyor
-        token_limit = max_tokens
+        # Son adımda çok daha uzun çıktı bekleniyor (tam test kodu)
+        token_limit = 3000  # Test kodu için daha fazla token
     elif step_number in [1, 2, 3]:
         # İlk adımlarda kısa onay bekleniyor
-        token_limit = 300
+        token_limit = 200  # Daha kısa limit - sadece onay
+    elif step_number == 4:
+        # Test tasarım kriterleri için orta uzunluk
+        token_limit = 2000
+    elif step_number == 5:
+        # Statik kontrol için kısa
+        token_limit = 800
+    elif step_number == 6:
+        # Final briefing için orta uzunluk
+        token_limit = 2000
     else:
         # Diğer adımlarda orta uzunlukta
         token_limit = 1500
@@ -288,6 +493,11 @@ def send_to_llm(prompt, conversation_history=None, max_tokens=2000, step_number=
         print("\n[UYARI: LLM çok uzun enum tanımları üretiyor, ilk 500 karakter gösteriliyor]")
         return generated_text[:500] + "\n\n[... çıktı kesildi, muhtemelen tekrarlı enum tanımları ...]"
     
+    # Yanlış format kontrolü - eğer kod/enum üretiyorsa uyar
+    if step_number in [1, 2, 3] and ("typedef" in generated_text or "enum" in generated_text or "void " in generated_text[:100]):
+        print("\n[UYARI: LLM beklenen formatta cevap vermedi - kod/enum üretiyor]")
+        print("[İlk 200 karakter:]", generated_text[:200])
+    
     return generated_text.strip()
 
 # ==============================================================================
@@ -305,11 +515,56 @@ def run_7_step_process():
     print("="*50)
     
     # Fonksiyon adını başta al
-    print("\nÖnce test edilecek fonksiyonun adını girin:")
-    function_name = input("Fonksiyon adı (örn: example_func): ").strip()
+    print("\nTest edilecek fonksiyonun adını girin:")
+    function_name = input("Fonksiyon adı (örn: engine_initialize): ").strip()
     if not function_name:
         print("Fonksiyon adı boş olamaz!")
         return
+    
+    # Otomatik bilgi toplama
+    print(f"\n[Otomatik bilgi toplanıyor: {function_name}...]")
+    module_name = find_function_module(function_name)
+    print(f"Modül bulundu: {module_name}")
+    
+    # Header dosyasını oku
+    header_content = read_header_file(module_name)
+    if not header_content:
+        print(f"HATA: {module_name}.h dosyası bulunamadı!")
+        return
+    
+    # Fonksiyon imzasını ve dokümantasyonunu çıkar
+    signature, doc_comment = extract_function_signature(header_content, function_name)
+    if not signature:
+        print(f"UYARI: {function_name} fonksiyon imzası bulunamadı, devam ediliyor...")
+    
+    # Bağımlılıkları bul
+    dependencies = extract_all_dependencies(header_content)
+    dependency_headers = read_dependency_headers(dependencies)
+    
+    # Tüm header dosyalarını birleştir
+    all_headers = header_content
+    for dep_name, dep_content in dependency_headers.items():
+        all_headers += f"\n\n/* ========== {dep_name} ========== */\n\n"
+        all_headers += dep_content
+    
+    # Implementasyonu bul
+    c_file = f"{module_name}.c"
+    implementation = extract_function_implementation(c_file, function_name)
+    
+    # README'yi oku
+    readme_content = read_module_readme(module_name)
+    
+    # Fonksiyon arayüz dokümantasyonunu oluştur
+    function_interface_doc = build_function_interface_doc(function_name, signature, doc_comment)
+    
+    # Fonksiyonel davranış dokümantasyonunu oluştur
+    functional_behavior_doc = build_functional_behavior_doc(function_name, implementation, readme_content)
+    
+    print(f"[✓] Header dosyası okundu")
+    print(f"[✓] Fonksiyon imzası bulundu: {signature[:50] if signature else 'Bulunamadı'}...")
+    print(f"[✓] {len(dependencies)} bağımlılık bulundu")
+    print(f"[✓] Implementasyon {'bulundu' if implementation else 'bulunamadı'}")
+    print(f"[✓] README {'okundu' if readme_content else 'bulunamadı'}")
     
     # Adım 1: Girizgah
     print("\n[ADIM 1/7] Girizgah (Rol ve Görev Tanımı)")
@@ -328,27 +583,14 @@ def run_7_step_process():
     
     input("\nDevam etmek için Enter'a basın...")
     
-    # Adım 2: Çevreyi Tanımlama
+    # Adım 2: Çevreyi Tanımlama (Otomatik)
     print("\n[ADIM 2/7] Çevreyi Tanımlama (Header Dosyaları ve Fonksiyon Arayüzü)")
     print("-" * 50)
-    print("\nLütfen header dosyalarının içeriğini girin (birden fazla satır, bitirmek için boş satır + 'END' yazın):")
-    header_lines = []
-    while True:
-        line = input()
-        if line.strip().upper() == "END":
-            break
-        header_lines.append(line)
-    header_files_content = "\n".join(header_lines)
+    print("[Otomatik olarak header dosyaları ve fonksiyon arayüzü hazırlanıyor...]")
     
-    print("\nLütfen fonksiyon arayüzü dokümantasyonunu girin (Bölüm 1 ve Bölüm 2 - bitirmek için boş satır + 'END' yazın):")
-    print("(Bölüm 1: Genel Bakış ve Amaç, Bölüm 2: Teknik Arayüz Sözleşmesi)")
-    interface_lines = []
-    while True:
-        line = input()
-        if line.strip().upper() == "END":
-            break
-        interface_lines.append(line)
-    function_interface_doc = "\n".join(interface_lines)
+    # Otomatik olarak toplanan bilgileri kullan
+    header_files_content = all_headers
+    # function_interface_doc zaten oluşturuldu
     
     step2_prompt = get_step2_prompt(header_files_content, function_name, function_interface_doc)
     response2 = send_to_llm(step2_prompt, conversation_history, step_number=2)
@@ -361,17 +603,12 @@ def run_7_step_process():
     
     input("\nDevam etmek için Enter'a basın...")
     
-    # Adım 3: Fonksiyonel Davranış
+    # Adım 3: Fonksiyonel Davranış (Otomatik)
     print("\n[ADIM 3/7] Fonksiyonel Davranış ve Mantık")
     print("-" * 50)
-    print("\nLütfen fonksiyonel davranış dokümantasyonunu girin (bitirmek için boş satır + 'END' yazın):")
-    behavior_lines = []
-    while True:
-        line = input()
-        if line.strip().upper() == "END":
-            break
-        behavior_lines.append(line)
-    functional_behavior_doc = "\n".join(behavior_lines)
+    print("[Otomatik olarak fonksiyonel davranış dokümantasyonu hazırlanıyor...]")
+    
+    # functional_behavior_doc zaten oluşturuldu
     
     step3_prompt = get_step3_prompt(function_name, functional_behavior_doc)
     response3 = send_to_llm(step3_prompt, conversation_history, step_number=3)
@@ -429,8 +666,50 @@ def run_7_step_process():
     # Adım 7: Test Kodunu Üret
     print("\n[ADIM 7/7] Test Kodunu Üretme")
     print("-" * 50)
+    
+    # Final briefing'i hazırla - tüm önemli bilgileri özetle
+    # Adım 6'dan gelen final briefing'i kullan, yoksa kendimiz oluştur
+    if response6 and "Final Test Brifingi" in response6 and len(response6) > 300:
+        final_briefing_summary = response6
+    else:
+        # Kendimiz oluştur
+        final_briefing_summary = f"""Final Test Brifingi: {function_name}
+
+Test Edilecek Fonksiyon: {function_name}
+
+Teknik Arayüz:
+İmza: {signature if signature else 'Bulunamadı'}
+{doc_comment[:300] if doc_comment else ''}
+
+Bağımlılıklar: {', '.join(dependencies) if dependencies else 'Bulunamadı'}
+
+Fonksiyon İş Akışı (Özet):
+{implementation[:500] if implementation else 'Implementasyon bulunamadı'}...
+"""
+    
+    # Test tasarım kriterlerini de ekle (Adım 4'ten)
+    test_design_summary = ""
+    if response4 and len(response4) > 200 and "Bölüm 3" in response4:
+        # Adım 4'ten test tasarım kriterlerini çıkar
+        test_design_summary = response4[:800] + "..."
+    
+    # Son adımda conversation history'yi sıfırla ve sadece özet bilgiler + prompt gönder
     step7_prompt = get_step7_prompt(function_name)
-    response7 = send_to_llm(step7_prompt, conversation_history, step_number=7, max_tokens=2500)
+    
+    # Kapsamlı prompt oluştur
+    enhanced_step7_prompt = f"""Sen bir C test kodu uzmanısın. Aşağıda {function_name} fonksiyonu için tüm gerekli bilgiler bulunmaktadır:
+
+{final_briefing_summary}
+
+{test_design_summary if test_design_summary else ''}
+
+Şimdi bu bilgilere dayanarak {function_name} fonksiyonu için Ceedling/Unity formatında TAM ve EKSİKSİZ bir test dosyası yaz.
+
+{step7_prompt}"""
+    
+    print("[Final briefing hazırlandı, test kodu üretiliyor...]")
+    print(f"[Final briefing uzunluğu: {len(enhanced_step7_prompt)} karakter]")
+    response7 = send_to_llm(enhanced_step7_prompt, conversation_history=None, step_number=7, max_tokens=3000, use_minimal_history=True)
     
     print("\n" + "="*50)
     print(" ÜRETİLEN TEST KODU")
@@ -483,8 +762,10 @@ if __name__ == "__main__":
         print("\n" + "="*50)
         print(" TEST ÜRETİM SİSTEMİ")
         print("="*50)
+        print("\nBu sistem, projedeki C fonksiyonları için otomatik test kodu üretir.")
+        print("Sadece test edilecek fonksiyonun adını girin (örn: engine_initialize)")
         print("\nSeçenekler:")
-        print("1. 7 Adımlı Aşamalı Bilgi Yükleme Süreci")
+        print("1. Otomatik Test Üretimi (7 Adımlı - Önerilen)")
         print("2. Basit Tek Seferlik Talimat (Eski Yöntem)")
         print("3. Çıkış")
         
